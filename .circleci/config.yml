@@ -1,0 +1,56 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    working_directory: ~/build
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # Uncomment if your build has UI components.
+          #- node-dependency-cache-{{ checksum "node_modules" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: "Install dependencies"
+          command: gradle dependencies
+
+      - run:
+          name: "Run tests and package"
+          command: ./gradlew clean test
+
+      - run:
+          name: "Save test results"
+          command: |
+            mkdir -p ~/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
+          when: always
+
+      - store_test_results:
+          path: ~/junit
+
+      - store_artifacts:
+          path: ~/junit
+
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      - run:
+          name: "Build docker image"
+          command: ./gradlew bootRepackage -Pprod buildDocker
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build
