@@ -1,30 +1,20 @@
 package com.opuscapita.peppol.inbound;
 
-import com.opuscapita.peppol.inbound.module.MessageHandler;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootApplication(scanBasePackages = {
-        "com.opuscapita.peppol",
-        "com.opuscapita.commons",
-        "no.difi.oxalis.as2.inbound"})
+@RestController
+@EnableAutoConfiguration
 public class InboundApp {
 
-    private static MessageHandler mh;
-
-    @Autowired
-    public InboundApp(@NotNull MessageHandler messageHandler) {
-        mh = messageHandler;
+    @RequestMapping("/")
+    String home() {
+        return "Hello World!";
     }
 
     public static void main(String[] args) {
         SpringApplication.run(InboundApp.class, args);
-    }
-
-    @NotNull
-    public static MessageHandler getMessageHandler() {
-        return mh;
     }
 }
