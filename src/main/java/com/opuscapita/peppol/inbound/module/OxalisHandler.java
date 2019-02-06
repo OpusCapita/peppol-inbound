@@ -1,0 +1,65 @@
+package com.opuscapita.peppol.inbound.module;
+
+import com.opuscapita.peppol.inbound.InboundApp;
+import no.difi.oxalis.api.inbound.InboundMetadata;
+import no.difi.oxalis.api.model.TransmissionIdentifier;
+import no.difi.oxalis.api.persist.PersisterHandler;
+import no.difi.oxalis.api.util.Type;
+import no.difi.vefa.peppol.common.model.Header;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Singleton;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+@Singleton
+@Type("opuscapita")
+public class OxalisHandler implements PersisterHandler {
+
+    private final static Logger logger = LoggerFactory.getLogger(OxalisHandler.class);
+
+    private final MessageHandler messageHandler;
+
+    @SuppressWarnings("ConstantConditions")
+    public OxalisHandler() {
+        // this is done to separate Spring dependency injection from Guice one (we're in Guice now, while messageHandler is in Spring)
+        messageHandler = InboundApp.getMessageHandler();
+        logger.info("OpusCapita inbound receiver initialized");
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public Path persist(TransmissionIdentifier transmissionIdentifier, Header header, InputStream inputStream) throws IOException {
+        String transmissionId = header.getIdentifier().getIdentifier();
+        String dataFile = messageHandler.preProcess(transmissionId, inputStream);
+        return Paths.get(dataFile);
+    }
+
+    @Override
+    public void persist(InboundMetadata inboundMetadata, Path payloadPath) {
+        messageHandler.process(inboundMetadata, payloadPath);
+
+        logger.info("Transmission receipt for " + payloadPath.toString() + ":\n" + inboundMetadataToString(inboundMetadata));
+    }
+
+    private String inboundMetadataToString(InboundMetadata metadata) {
+        return "{" +
+                "transmissionIdentifier=" + metadata.getTransmissionIdentifier().getIdentifier() +
+                ", header={" +
+                "   sender=" + metadata.getHeader().getSender().getIdentifier() +
+                ",  receiver=" + metadata.getHeader().getReceiver().getIdentifier() +
+                ",  process=" + metadata.getHeader().getProcess().getIdentifier() +
+                ",  documentType=" + metadata.getHeader().getDocumentType().getIdentifier() +
+                ",  identifier=" + metadata.getHeader().getIdentifier().getIdentifier() +
+                ",  instanceType=" + metadata.getHeader().getInstanceType().toString() +
+                ",  creationTimestamp=" + metadata.getHeader().getCreationTimestamp() +
+                "}" +
+                ", timestamp=" + metadata.getTimestamp().toString() +
+                ", transportProtocol=" + metadata.getTransportProtocol().getIdentifier() +
+                ", tag='" + metadata.getTag().getIdentifier() +
+                '}';
+    }
+}
