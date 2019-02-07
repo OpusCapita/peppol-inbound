@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: ayltai/circleci-openjdk-node
+      - image: ayltai/circleci-openjdk-node:jdk8-node11
     working_directory: ~/build
     steps:
       - checkout
@@ -31,7 +31,7 @@ jobs:
 
   copy_to_env:
     docker:
-      - image: ayltai/circleci-openjdk-node
+      - image: ayltai/circleci-openjdk-node:jdk8-node11
     working_directory: ~/build
 
     steps:
@@ -47,7 +47,7 @@ jobs:
 
   build_base:
     docker:
-      - image: ayltai/circleci-openjdk-node
+      - image: ayltai/circleci-openjdk-node:jdk8-node11
     working_directory: ~/build
     steps:
       - checkout
