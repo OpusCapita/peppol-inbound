@@ -2,55 +2,83 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: ayltai/circleci-openjdk-node
     working_directory: ~/build
     steps:
       - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "build.gradle" }}
-          # Uncomment if your build has UI components.
-          #- node-dependency-cache-{{ checksum "node_modules" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
-      - run:
-          name: "Install dependencies"
-          command: gradle dependencies
-
-      - run:
-          name: "Run tests and package"
-          command: ./gradlew clean test
-
-      - run:
-          name: "Save test results"
-          command: |
-            mkdir -p ~/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
-          when: always
-
-      - store_test_results:
-          path: ~/junit
-
-      - store_artifacts:
-          path: ~/junit
-
       - setup_remote_docker:
           docker_layer_caching: true
-
       - run:
-          name: "Build docker image"
-          command: ./gradlew bootRepackage -Pprod buildDocker
+          name: "prepare buildprocess scripts"
+          command: |
+              git clone https://github.com/OpusCapita/duriel.git -b master ../buildprocess
+              cd ../buildprocess
+              npm install
+              npm test
+              mv junit ~/build/junit
+              cd ~/build
+      - run:
+          name: "building and testing locally"
+          command: "node ../buildprocess/bp_localbuild.js opuscapita/$CIRCLE_PROJECT_REPONAME"
+      - store_test_results:
+          path: "junit"
+      - run:
+          name: "Deployment"
+          command: "node ../buildprocess/bp_deploy.js"
+      - run:
+          name: "After Deployment"
+          command: "node ../buildprocess/bp_after_deployment.js"
 
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "build.gradle" }}
+  copy_to_env:
+    docker:
+      - image: ayltai/circleci-openjdk-node
+    working_directory: ~/build
+
+    steps:
+      - checkout
+      - run:
+          name: Mirror Script
+          command: |
+            export andariel_branch=develop
+            if [[ "$CIRCLE_BRANCH" == "master" ]]; then export andariel_branch=master; fi
+            curl -f --header "Authorization: token $GIT_TOKEN" https://raw.githubusercontent.com/OpusCapita/andariel/$andariel_branch/mirrorscript.sh > mirrorscript.sh
+            chmod +x mirrorscript.sh
+            ./mirrorscript.sh opuscapita/$CIRCLE_PROJECT_REPONAME $FROM_ENV $TO_ENV $GIT_TOKEN
+
+  build_base:
+    docker:
+      - image: ayltai/circleci-openjdk-node
+    working_directory: ~/build
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: "prepare buildprocess scripts"
+          command: |
+             git clone https://github.com/OpusCapita/duriel.git -b master ../buildprocess
+             cd ../buildprocess
+             npm install
+             npm test
+             mv junit ~/build/junit
+             cd ~/build
+      - run:
+          name: "Build Base Image"
+          command: "node ../buildprocess/bp_build_base.js opuscapita/$CIRCLE_PROJECT_REPONAME ;"
 
 workflows:
   version: 2
   commit:
     jobs:
       - build
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - develop
+                - nbp
+    jobs:
+      - build_base

@@ -1,0 +1,16 @@
+version: '3'
+services:
+  main:
+    build: .
+    image: opuscapita/peppol-inbound
+    labels:
+      SERVICE_NAME: 'peppol-inbound'
+      SERVICE_TAGS: 'kong'
+    environment:
+      PORT: 8080
+      SERVICE_8080_NAME: peppol-inbound
+      SERVICE_8080_CHECK_HTTP: /api/health/check
+      SERVICE_8080_CHECK_INTERVAL: 15s
+      SERVICE_8080_CHECK_TIMEOUT: 3s
+    ports:
+     - '8080:8080'
