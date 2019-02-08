@@ -1,12 +1,27 @@
+## using multistage docker build for speed
+## temp container to build
+FROM openjdk:8u141 AS TEMP_BUILD_IMAGE
+ENV APP_HOME=/usr/app/
+WORKDIR $APP_HOME
+COPY build.gradle settings.gradle gradlew $APP_HOME
+COPY gradle $APP_HOME/gradle
+RUN ./gradlew build || return 0
+COPY . .
+RUN ./gradlew build
+
+## actual container
 FROM openjdk:8u141
 LABEL author="Ibrahim Bilge <Ibrahim.Bilge@opuscapita.com>"
 
-# custom persistence module
-ADD ["build/libs/peppol-inbound.jar", "peppol-inbound.jar"]
+ENV ARTIFACT_NAME=peppol-inbound.jar
+ENV APP_HOME=/usr/app/
 
-EXPOSE 8080
+WORKDIR $APP_HOME
+
+COPY --from=TEMP_BUILD_IMAGE $APP_HOME/build/libs/peppol-inbound.jar .
 
 #HEALTHCHECK --interval=15s --timeout=3s --retries=12 \
-#  CMD curl --silent --fail http://localhost:3008/api/health/check || exit 1
+#    CMD curl --silent --fail http://localhost:8080/api/health/check || exit 1
 
+EXPOSE 8080
 ENTRYPOINT ["java","-jar","peppol-inbound.jar"]
