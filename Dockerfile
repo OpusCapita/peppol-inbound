@@ -20,7 +20,7 @@ WORKDIR $APP_HOME
 COPY --from=TEMP_BUILD_IMAGE $APP_HOME/build/libs/peppol-inbound.jar .
 
 #HEALTHCHECK --interval=15s --timeout=3s --retries=12 \
-#    CMD curl --silent --fail http://localhost:8080/api/health/check || exit 1
+#    CMD curl --silent --fail http://localhost:3036/api/health/check || exit 1
 
-EXPOSE 8080
+EXPOSE 3036
 ENTRYPOINT ["java","-jar","peppol-inbound.jar"]
