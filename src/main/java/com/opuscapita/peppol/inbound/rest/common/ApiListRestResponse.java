@@ -1,4 +1,4 @@
-package com.opuscapita.peppol.inbound;
+package com.opuscapita.peppol.inbound.rest.common;
 
 public class ApiListRestResponse {
 

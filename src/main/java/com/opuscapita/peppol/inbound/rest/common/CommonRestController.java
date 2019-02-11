@@ -1,4 +1,4 @@
-package com.opuscapita.peppol.inbound;
+package com.opuscapita.peppol.inbound.rest.common;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,10 +34,10 @@ public class CommonRestController {
     }
 
     @RequestMapping("/api/list/apis")
-    public ApiListRestResponse[] list() {
+    public List<ApiListRestResponse> list() {
         List<ApiListRestResponse> response = new ArrayList<>();
         response.add(new ApiListRestResponse("/public/as2", "/public/as2"));
         response.add(new ApiListRestResponse("/public/status", "/public/status"));
-        return (ApiListRestResponse[]) response.toArray();
+        return response;
     }
 }

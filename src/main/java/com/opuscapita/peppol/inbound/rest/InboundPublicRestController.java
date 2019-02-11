@@ -1,4 +1,4 @@
-package com.opuscapita.peppol.inbound;
+package com.opuscapita.peppol.inbound.rest;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 
 @RestController
 @RequestMapping("/public")
-public class InboundRestController {
+public class InboundPublicRestController {
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
     public void status(HttpServletRequest request, HttpServletResponse response) throws IOException {
