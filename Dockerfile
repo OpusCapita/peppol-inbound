@@ -1,5 +1,26 @@
-FROM openjdk:8u141
-LABEL author="Ibrahim Bilge <Ibrahim.Bilge@opuscapita.com>"
+#FROM openjdk:8u141
+#LABEL author="Ibrahim Bilge <Ibrahim.Bilge@opuscapita.com>"
+#
+#ENV APP_HOME=/usr/app/
+#WORKDIR $APP_HOME
+#
+#COPY build.gradle settings.gradle gradlew $APP_HOME
+#COPY gradle $APP_HOME/gradle
+#COPY . $APP_HOME
+#
+#RUN chmod +x ./gradlew
+#RUN ./gradlew build || return 0
+#
+#HEALTHCHECK --interval=15s --timeout=3s --retries=15 \
+#  CMD curl --silent --fail http://localhost:8080/api/health/check || exit 1
+#
+#EXPOSE 3036
+#ENTRYPOINT ["java", "-jar", "build/libs/peppol-inbound.jar"]
+
+
+## using multistage docker build for speed
+## temp container to build
+FROM openjdk:8u141 AS TEMP_BUILD_IMAGE
 
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
@@ -11,8 +32,17 @@ COPY . $APP_HOME
 RUN chmod +x ./gradlew
 RUN ./gradlew build || return 0
 
+## actual container
+FROM openjdk:8u141
+LABEL author="Ibrahim Bilge <Ibrahim.Bilge@opuscapita.com>"
+
+ENV APP_HOME=/usr/app/
+WORKDIR $APP_HOME
+
+COPY --from=TEMP_BUILD_IMAGE $APP_HOME/build/libs/peppol-inbound.jar .
+
 HEALTHCHECK --interval=15s --timeout=3s --retries=15 \
-  CMD curl --silent --fail http://localhost:8080/api/health/check || exit 1
+  CMD curl --silent --fail http://localhost:3036/api/health/check || exit 1
 
 EXPOSE 3036
-ENTRYPOINT ["java", "-jar", "build/libs/peppol-inbound.jar"]
+ENTRYPOINT ["java","-jar","peppol-inbound.jar"]
