@@ -1,5 +1,7 @@
 package com.opuscapita.peppol.inbound.rest;
 
+import com.opuscapita.peppol.inbound.InboundConfigProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,9 @@ import java.io.PrintWriter;
 @RequestMapping("/public")
 public class InboundPublicRestController {
 
+    @Autowired
+    private InboundConfigProperties config;
+
     @RequestMapping(value = "/status", method = RequestMethod.GET)
     public void status(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter writer = response.getWriter();
@@ -23,6 +28,7 @@ public class InboundPublicRestController {
         writer.println("certificate.subject: C=FI,O=OpusCapita Solutions Oy,OU=PEPPOL PRODUCTION AP,CN=PNO000104");
         writer.println("certificate.issuer: CN=PEPPOL ACCESS POINT CA - G2,O=OpenPEPPOL AISBL,C=BE");
         writer.println("certificate.expired: false");
+        writer.println("test.config.key: " + config.getProp());
     }
 
     @RequestMapping(value = "/as2", method = RequestMethod.GET)
