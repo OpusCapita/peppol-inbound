@@ -6,10 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-
 @SpringBootApplication(scanBasePackages = {
         "com.opuscapita.peppol.inbound",
         "com.opuscapita.peppol.commons",
@@ -24,18 +20,6 @@ public class InboundApp {
     }
 
     public static void main(String[] args) {
-
-        try {
-            String dirName = "/run/secrets/";
-            Files.list(new File(dirName).toPath())
-                    .limit(10)
-                    .forEach(path -> {
-                        System.out.println(path);
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         SpringApplication.run(InboundApp.class, args);
     }
 
