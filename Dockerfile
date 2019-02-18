@@ -20,8 +20,7 @@ ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
 ENV OXALIS_HOME=$APP_HOME/.oxalis/
-RUN mkdir .oxalis
-COPY --from=TEMP_BUILD_IMAGE $APP_HOME/.oxalis/* .oxalis/
+COPY .oxalis $APP_HOME/.oxalis
 
 RUN pwd
 RUN ls -l
