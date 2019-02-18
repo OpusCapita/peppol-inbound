@@ -25,4 +25,4 @@ HEALTHCHECK --interval=15s --timeout=3s --retries=15 \
   CMD curl --silent --fail http://localhost:3036/api/health/check || exit 1
 
 EXPOSE 3036
-#ENTRYPOINT ["java","-jar","peppol-inbound.jar"]
+ENTRYPOINT ["java","-jar","peppol-inbound.jar"]
