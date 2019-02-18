@@ -1,5 +1,4 @@
 version: '3'
 services:
   main:
-    image: opuscapita/peppol-inbound:dev
-    command: 'gradlew bootRun'
+    image: openjdk:8
