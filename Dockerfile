@@ -17,13 +17,10 @@ FROM openjdk:8
 LABEL author="Ibrahim Bilge <Ibrahim.Bilge@opuscapita.com>"
 
 ENV APP_HOME=/usr/app/
+ENV OXALIS_HOME=$APP_HOME/oxalis/
+
 WORKDIR $APP_HOME
-
-ENV OXALIS_HOME=$APP_HOME/.oxalis/
-COPY .oxalis $APP_HOME/.oxalis
-
-RUN pwd
-RUN ls -l
+COPY oxalis $OXALIS_HOME
 
 COPY --from=TEMP_BUILD_IMAGE $APP_HOME/build/libs/peppol-inbound.jar .
 
