@@ -1,4 +1,4 @@
-version: '3'
+version: '3.1'
 services:
   main:
     build: .
@@ -27,6 +27,9 @@ services:
       OXALIS_HOME: /run/secrets
     ports:
      - '3036:3036'
+    secrets:
+     - oxalis.conf
+     - oxalis-keystore.jks
 
   mysql:
     image: "mysql:5.7"
@@ -134,3 +137,9 @@ services:
     labels:
       SERVICE_IGNORE: 'true'
     command: [agent, '-server', '-ui', '-bootstrap', '-client=0.0.0.0']
+
+secrets:
+  oxalis.conf:
+    file: oxalis.conf
+  oxalis-keystore.jks:
+    file: oxalis-keystore.jks

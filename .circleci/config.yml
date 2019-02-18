@@ -18,6 +18,9 @@ jobs:
               mv junit ~/build/junit
               cd ~/build
       - run:
+          name: "dumb secrets"
+          command: echo $OXALIS_CONF > oxalis.conf && echo $SECRET_develop_PRPPOLKEYSTORE > oxalis-keystore.jks
+      - run:
           name: "building and testing locally"
           command: "node ../buildprocess/bp_localbuild.js opuscapita/$CIRCLE_PROJECT_REPONAME"
       - store_test_results:
