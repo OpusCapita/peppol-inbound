@@ -19,7 +19,7 @@ jobs:
               cd ~/build
       - run:
           name: "dumb secrets"
-          command: echo $OXALIS_CONF > oxalis.conf && echo $SECRET_develop_PRPPOLKEYSTORE > oxalis-keystore.jks
+          command: echo $OXALIS_CONF | base64 --decode > oxalis.conf && echo $SECRET_develop_PEPPOLKEYSTORE | base64 --decode > oxalis-keystore.jks
       - run:
           name: "building and testing locally"
           command: "node ../buildprocess/bp_localbuild.js opuscapita/$CIRCLE_PROJECT_REPONAME"

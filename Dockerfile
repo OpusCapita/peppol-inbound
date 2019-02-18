@@ -19,6 +19,9 @@ LABEL author="Ibrahim Bilge <Ibrahim.Bilge@opuscapita.com>"
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
+# temp, debugging purposes
+RUN ls -l /run/secrets
+
 COPY --from=TEMP_BUILD_IMAGE $APP_HOME/build/libs/peppol-inbound.jar .
 
 HEALTHCHECK --interval=15s --timeout=3s --retries=15 \
