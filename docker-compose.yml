@@ -2,7 +2,7 @@ version: '3'
 services:
   main:
     build: .
-    image: openjdk:8
+    image: opuscapita/peppol-inbound:dev
     depends_on:
      - mysql
      - consul
