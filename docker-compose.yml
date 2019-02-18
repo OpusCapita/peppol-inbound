@@ -27,9 +27,6 @@ services:
       OXALIS_HOME: /run/secrets
     ports:
      - '3036:3036'
-    secrets:
-     - oxalis.conf
-     - oxalis-keystore.jks
 
   mysql:
     image: "mysql:5.7"
