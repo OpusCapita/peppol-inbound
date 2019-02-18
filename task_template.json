@@ -10,8 +10,7 @@
            "SERVICE_NAME=${serviceName}",
            "SERVICE_3036_CHECK_HTTP=/api/health/check",
            "SERVICE_3036_CHECK_INTERVAL=15s",
-           "SERVICE_3036_CHECK_TIMEOUT=3s",
-           "OXALIS_HOME=/run/secrets"
+           "SERVICE_3036_CHECK_TIMEOUT=3s"
            ],
     "oc-db-init":{"populate-test-data":"true"},
     "oc-consul-injection":{
