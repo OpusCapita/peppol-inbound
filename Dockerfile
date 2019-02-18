@@ -16,7 +16,6 @@ RUN ./gradlew build || return 0
 FROM openjdk:8
 LABEL author="Ibrahim Bilge <Ibrahim.Bilge@opuscapita.com>"
 
-ENV OXALIS_HOME=/run/secrets/
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
