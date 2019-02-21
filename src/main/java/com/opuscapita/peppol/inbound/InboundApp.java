@@ -52,14 +52,18 @@ public class InboundApp {
             return;
         }
 
+        System.out.println("OXALIS_HOME: " + oxalisHome);
+
         String conf = System.getenv("OXALIS_CONF");
         String cert = System.getenv("OXALIS_CERT");
 
         if (StringUtils.isNotBlank(conf)) {
+            System.out.println("OXALIS_CONF: found");
             File file = new File(oxalisHome + "/oxalis.conf");
             FileUtils.writeByteArrayToFile(file, DatatypeConverter.parseBase64Binary(conf));
         }
         if (StringUtils.isNotBlank(cert)) {
+            System.out.println("OXALIS_CERT: found");
             File file = new File(oxalisHome + "/oxalis-keystore.jks");
             FileUtils.writeByteArrayToFile(file, DatatypeConverter.parseBase64Binary(cert));
         }
