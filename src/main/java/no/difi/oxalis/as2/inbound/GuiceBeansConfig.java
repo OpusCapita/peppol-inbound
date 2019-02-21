@@ -18,7 +18,10 @@ public class GuiceBeansConfig {
 
     @Bean
     public ServletRegistrationBean homeServletBean() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(new InboundHomeServlet(), "/");
+        ServletRegistrationBean bean = new ServletRegistrationBean(new InboundHomeServlet(),
+                "/",
+                "/api/health/check",
+                "/api/list/apis");
         bean.setLoadOnStartup(1);
         return bean;
     }
@@ -49,5 +52,4 @@ public class GuiceBeansConfig {
         filter.setAfterMessagePrefix("REQUEST DATA : ");
         return filter;
     }
-
 }

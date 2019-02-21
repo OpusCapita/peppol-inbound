@@ -27,7 +27,7 @@ public class MessageHandler {
     @Value("${peppol.inbound.copy.directory:}")
     private String copyDirectory;
 
-    @Value("${peppol.component.name:peppol-inbound}")
+    @Value("${spring.application.name}")
     private String componentName;
 
     private final Storage storage;

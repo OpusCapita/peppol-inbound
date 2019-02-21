@@ -15,10 +15,10 @@ public class MessageSender {
 
     private final static Logger logger = LoggerFactory.getLogger(MessageSender.class);
 
-    @Value("${peppol.inbound.queue.out.name:preprocessing}")
+    @Value("${peppol.inbound.queue.out.name}")
     private String outputQueue;
 
-    @Value("${peppol.eventing.queue.in.name:eventing}")
+    @Value("${peppol.eventing.queue.in.name}")
     private String eventingQueue;
 
     private final MessageQueue messageQueue;

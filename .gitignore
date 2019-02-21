@@ -86,3 +86,6 @@ build/
 local.properties
 *.exe
 *.retry
+
+# Oxalis home conf
+oxalis/*
