@@ -140,6 +140,6 @@ services:
 
 secrets:
   oxalis.conf:
-    external: true
+    file: ../oxalis/oxalis.conf
   oxalis-keystore.jks:
-    external: true
+    file: ../oxalis/oxalis-keystore.jks
