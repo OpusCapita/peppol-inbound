@@ -26,13 +26,13 @@ public class InboundApp {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(InboundApp.class, args);
-
         try {
             prepareOxalisHomeDirectory();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        SpringApplication.run(InboundApp.class, args);
     }
 
     /**
