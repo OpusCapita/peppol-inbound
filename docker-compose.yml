@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3'
 services:
   main:
     build: .
@@ -24,12 +24,10 @@ services:
       SERVICE_3036_CHECK_HTTP: /api/health/check
       SERVICE_3036_CHECK_INTERVAL: 15s
       SERVICE_3036_CHECK_TIMEOUT: 3s
-      OXALIS_HOME: /run/secrets
+      OXALIS_CONF: ${OXALIS_CONF}
+      OXALIS_CERT: ${SECRET_develop_PEPPOLKEYSTORE}
     ports:
      - '3036:3036'
-    secrets:
-     - oxalis.conf
-     - oxalis-keystore.jks
 
   mysql:
     image: "mysql:5.7"
@@ -138,8 +136,3 @@ services:
       SERVICE_IGNORE: 'true'
     command: [agent, '-server', '-ui', '-bootstrap', '-client=0.0.0.0']
 
-secrets:
-  oxalis.conf:
-    file: ../oxalis/oxalis.conf
-  oxalis-keystore.jks:
-    file: ../oxalis/oxalis-keystore.jks

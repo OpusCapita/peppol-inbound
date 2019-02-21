@@ -1,10 +1,16 @@
 package com.opuscapita.peppol.inbound;
 
 import com.opuscapita.peppol.inbound.module.MessageHandler;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import javax.xml.bind.DatatypeConverter;
+import java.io.File;
+import java.io.IOException;
 
 @SpringBootApplication(scanBasePackages = {
         "com.opuscapita.peppol.inbound",
@@ -21,6 +27,12 @@ public class InboundApp {
 
     public static void main(String[] args) {
         SpringApplication.run(InboundApp.class, args);
+
+        try {
+            prepareOxalisHomeDirectory();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -32,5 +44,24 @@ public class InboundApp {
     @NotNull
     public static MessageHandler getMessageHandler() {
         return mh;
+    }
+
+    private static void prepareOxalisHomeDirectory() throws IOException {
+        String oxalisHome = System.getenv("OXALIS_HOME");
+        if (StringUtils.isBlank(oxalisHome)) {
+            return;
+        }
+
+        String conf = System.getenv("OXALIS_CONF");
+        String cert = System.getenv("OXALIS_CERT");
+
+        if (StringUtils.isNotBlank(conf)) {
+            File file = new File(oxalisHome + "/oxalis.conf");
+            FileUtils.writeByteArrayToFile(file, DatatypeConverter.parseBase64Binary(conf));
+        }
+        if (StringUtils.isNotBlank(cert)) {
+            File file = new File(oxalisHome + "/oxalis-keystore.jks");
+            FileUtils.writeByteArrayToFile(file, DatatypeConverter.parseBase64Binary(cert));
+        }
     }
 }
