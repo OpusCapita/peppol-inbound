@@ -11,6 +11,8 @@ services:
      - kong
      - rabbitmq
      - api-registry
+    volumes:
+     - ../oxalis:/usr/app/oxalis
     labels:
       SERVICE_NAME: 'peppol-inbound'
       SERVICE_TAGS: 'kong'
