@@ -24,6 +24,7 @@ services:
       SERVICE_3036_CHECK_HTTP: /api/health/check
       SERVICE_3036_CHECK_INTERVAL: 15s
       SERVICE_3036_CHECK_TIMEOUT: 3s
+      OXALIS_HOME: /usr/app/oxalis
       OXALIS_CONF: ${OXALIS_CONF}
       OXALIS_CERT: ${SECRET_develop_PEPPOLKEYSTORE}
     ports:
