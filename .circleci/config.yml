@@ -20,6 +20,7 @@ jobs:
       - run:
           name: "prepare oxalis home secrets"
           command: |
+              docker swarm init
               echo $OXALIS_CONF | base64 --decode | docker secret create oxalis.conf -
               echo $SECRET_develop_PEPPOLKEYSTORE | base64 --decode | docker secret create oxalis-keystore.jks -
               mvn org.apache.maven.plugins:maven-dependency-plugin:3.0.2:copy -Dartifact=mysql:mysql-connector-java:5.1.26:jar -DoutputDirectory=.
