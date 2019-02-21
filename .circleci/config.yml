@@ -11,7 +11,7 @@ jobs:
       - run:
           name: "prepare buildprocess scripts"
           command: |
-              git clone https://github.com/OpusCapita/duriel.git -b master ../buildprocess
+              git clone https://github.com/OpusCapita/duriel.git -b secret-creation-bug ../buildprocess
               cd ../buildprocess
               npm install
               npm test
@@ -29,7 +29,7 @@ jobs:
           path: "junit"
       - run:
           name: "Deployment"
-          command: "node ../buildprocess/bp_deploy.js"
+          command: "process.env.andariel_loglevel='debug' && node ../buildprocess/bp_deploy.js"
       - run:
           name: "After Deployment"
           command: "node ../buildprocess/bp_after_deployment.js"
