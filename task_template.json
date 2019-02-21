@@ -21,7 +21,7 @@
     },
     "oc-secret-injection": {
       "oxalis.conf": {"encoding": "base64", "value": "${OXALIS_CONF}"},
-      "oxalis-keystore.jks": {"encoding": "base64", "value": "${SECRET_:env_PEPPOLKEYSTORE}"}
+      "oxalis-keystore.jks": {"encoding": "base64", "value": "${SECRET_develop_PEPPOLKEYSTORE}"}
     }
   }
 }
