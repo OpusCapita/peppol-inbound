@@ -18,12 +18,11 @@ jobs:
               mv junit ~/build/junit
               cd ~/build
       - run:
-          name: "prepare oxalis home directory"
+          name: "prepare oxalis home secrets"
           command: |
-              mkdir ../oxalis
-              echo $OXALIS_CONF | base64 --decode > ../oxalis/oxalis.conf
-              echo $SECRET_develop_PEPPOLKEYSTORE | base64 --decode > ../oxalis/oxalis-keystore.jks
-              mvn org.apache.maven.plugins:maven-dependency-plugin:3.0.2:copy -Dartifact=mysql:mysql-connector-java:5.1.26:jar -DoutputDirectory=../oxalis
+              echo $OXALIS_CONF | base64 --decode | docker secret create oxalis.conf -
+              echo $SECRET_develop_PEPPOLKEYSTORE | base64 --decode | docker secret create oxalis-keystore.jks -
+              mvn org.apache.maven.plugins:maven-dependency-plugin:3.0.2:copy -Dartifact=mysql:mysql-connector-java:5.1.26:jar -DoutputDirectory=.
       - run:
           name: "building and testing locally"
           command: "node ../buildprocess/bp_localbuild.js opuscapita/$CIRCLE_PROJECT_REPONAME"

@@ -1,4 +1,4 @@
-version: '3'
+version: '3.1'
 services:
   main:
     build: .
@@ -11,8 +11,6 @@ services:
      - kong
      - rabbitmq
      - api-registry
-    volumes:
-     - ../oxalis:/usr/app/oxalis
     labels:
       SERVICE_NAME: 'peppol-inbound'
       SERVICE_TAGS: 'kong'
@@ -26,8 +24,12 @@ services:
       SERVICE_3036_CHECK_HTTP: /api/health/check
       SERVICE_3036_CHECK_INTERVAL: 15s
       SERVICE_3036_CHECK_TIMEOUT: 3s
+      OXALIS_HOME: /run/secrets
     ports:
      - '3036:3036'
+    secrets:
+     - oxalis.conf
+     - oxalis-keystore.jks
 
   mysql:
     image: "mysql:5.7"
@@ -135,3 +137,9 @@ services:
     labels:
       SERVICE_IGNORE: 'true'
     command: [agent, '-server', '-ui', '-bootstrap', '-client=0.0.0.0']
+
+secrets:
+  oxalis.conf:
+    external: true
+  oxalis-keystore.jks:
+    external: true
