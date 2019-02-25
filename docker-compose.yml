@@ -15,20 +15,20 @@ services:
       SERVICE_NAME: 'peppol-inbound'
       SERVICE_TAGS: 'kong'
     environment:
-      PORT: 3036
+      PORT: 3037
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       RABBITMQ_USER: ${RABBITMQ_USER}
       RABBITMQ_PASS: ${RABBITMQ_PASS}
-      SERVICE_3036_NAME: peppol-inbound
-      SERVICE_3036_CHECK_HTTP: /api/health/check
-      SERVICE_3036_CHECK_INTERVAL: 15s
-      SERVICE_3036_CHECK_TIMEOUT: 3s
+      SERVICE_3037_NAME: peppol-inbound
+      SERVICE_3037_CHECK_HTTP: /api/health/check
+      SERVICE_3037_CHECK_INTERVAL: 15s
+      SERVICE_3037_CHECK_TIMEOUT: 3s
       OXALIS_HOME: /usr/app/oxalis
       OXALIS_CONF: ${OXALIS_CONF}
       OXALIS_CERT: ${SECRET_develop_PEPPOLKEYSTORE}
     ports:
-     - '3036:3036'
+     - '3037:3037'
 
   mysql:
     image: "mysql:5.7"

@@ -4,13 +4,13 @@
     "log-driver":"gelf",
     "log-opt":["gelf-address=udp://${logstash_ip}:12201", "tag=\"${serviceName}\""],
     "constraint":["engine.labels.nodetype==worker"],
-    "publish":["mode=host,target=3036,published=3036,protocol=tcp"],
+    "publish":["mode=host,target=3037,published=3037,protocol=tcp"],
     "host":["consul:172.17.0.1"],
     "env":[
            "SERVICE_NAME=${serviceName}",
-           "SERVICE_3036_CHECK_HTTP=/api/health/check",
-           "SERVICE_3036_CHECK_INTERVAL=15s",
-           "SERVICE_3036_CHECK_TIMEOUT=3s",
+           "SERVICE_3037_CHECK_HTTP=/api/health/check",
+           "SERVICE_3037_CHECK_INTERVAL=15s",
+           "SERVICE_3037_CHECK_TIMEOUT=3s",
            "OXALIS_HOME=/run/secrets"
            ],
     "oc-db-init":{"populate-test-data":"true"},
