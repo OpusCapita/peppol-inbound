@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    /* adding web-init just to trigger service-user creation */
+    "@opuscapita/web-init": "^3.0.79"
+  }
+}
