@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
+import javax.servlet.http.HttpServlet;
+
 @Configuration
 public class GuiceBeansConfig {
 
@@ -17,8 +19,8 @@ public class GuiceBeansConfig {
     private final Injector injector = GuiceModuleLoader.initiate(new InboundModule());
 
     @Bean
-    public ServletRegistrationBean homeServletBean() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(new InboundHomeServlet(),
+    public ServletRegistrationBean<HttpServlet> homeServletBean() {
+        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(new InboundHomeServlet(),
                 "/",
                 "/api/health/check",
                 "/api/list/apis");
@@ -27,16 +29,16 @@ public class GuiceBeansConfig {
     }
 
     @Bean
-    public ServletRegistrationBean statusServletBean() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(
+    public ServletRegistrationBean<HttpServlet> statusServletBean() {
+        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
                 injector.getInstance(InboundStatusServlet.class), "/public/status");
         bean.setLoadOnStartup(1);
         return bean;
     }
 
     @Bean
-    public ServletRegistrationBean as2ServletBean() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(
+    public ServletRegistrationBean<HttpServlet> as2ServletBean() {
+        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
                 injector.getInstance(As2Servlet.class), "/public/as2");
         bean.setLoadOnStartup(1);
         return bean;

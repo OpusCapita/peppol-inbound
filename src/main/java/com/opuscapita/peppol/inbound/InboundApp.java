@@ -7,15 +7,16 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.ComponentScan;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.IOException;
 
-@SpringBootApplication(scanBasePackages = {
-        "com.opuscapita.peppol.inbound",
-        "com.opuscapita.peppol.commons",
-        "no.difi.oxalis.as2.inbound"})
+@EnableCaching
+@SpringBootApplication
+@ComponentScan({"com.opuscapita.peppol.inbound", "com.opuscapita.peppol.commons", "no.difi.oxalis.as2.inbound"})
 public class InboundApp {
 
     private static MessageHandler mh;
@@ -46,24 +47,24 @@ public class InboundApp {
         return mh;
     }
 
+    /**
+     * A bit tricky thing, Local build and testing uses docker compose
+     * This is the workaround to inject keys since compose secrets failed.
+     */
     private static void prepareOxalisHomeDirectory() throws IOException {
         String oxalisHome = System.getenv("OXALIS_HOME");
         if (StringUtils.isBlank(oxalisHome)) {
             return;
         }
 
-        System.out.println("OXALIS_HOME: " + oxalisHome);
-
         String conf = System.getenv("OXALIS_CONF");
         String cert = System.getenv("OXALIS_CERT");
 
         if (StringUtils.isNotBlank(conf)) {
-            System.out.println("OXALIS_CONF: found");
             File file = new File(oxalisHome + "/oxalis.conf");
             FileUtils.writeByteArrayToFile(file, DatatypeConverter.parseBase64Binary(conf));
         }
         if (StringUtils.isNotBlank(cert)) {
-            System.out.println("OXALIS_CERT: found");
             File file = new File(oxalisHome + "/oxalis-keystore.jks");
             FileUtils.writeByteArrayToFile(file, DatatypeConverter.parseBase64Binary(cert));
         }

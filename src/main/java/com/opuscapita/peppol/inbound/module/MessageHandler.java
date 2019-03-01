@@ -24,9 +24,6 @@ public class MessageHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
-    @Value("${peppol.inbound.copy.directory:}")
-    private String copyDirectory;
-
     @Value("${spring.application.name}")
     private String componentName;
 
@@ -49,7 +46,7 @@ public class MessageHandler {
     // this is the only method that allowed to throw an exception which will be propagated to the sending party
     private String storeTemporary(String transmissionId, InputStream inputStream) throws IOException {
         try {
-            String result = storage.storeTemporary(inputStream, transmissionId + ".xml", copyDirectory);
+            String result = storage.putToTemporary(inputStream, transmissionId + ".xml");
             logger.info("Received message stored as " + result);
             return result;
         } catch (Exception e) {
