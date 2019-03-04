@@ -2,7 +2,7 @@ package com.opuscapita.peppol.inbound.module;
 
 import com.opuscapita.peppol.commons.container.ContainerMessage;
 import com.opuscapita.peppol.commons.errors.ErrorHandler;
-import com.opuscapita.peppol.commons.mq.MessageQueue;
+import com.opuscapita.peppol.commons.queue.MessageQueue;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
