@@ -11,8 +11,8 @@
             "SERVICE_3037_CHECK_HTTP=/api/health/check",
             "SERVICE_3037_CHECK_INTERVAL=15s",
             "SERVICE_3037_CHECK_TIMEOUT=3s",
-            "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}",
-            "MYSQL_DATABASE=${MYSQL_DATABASE}",
+            "MYSQL_ROOT_PASSWORD=${SECRET_:env_MYSQL}",
+            "MYSQL_DATABASE=${serviceName}",
             "RABBITMQ_USER=${SECRET_:env_RABBITMQUSER}",
             "RABBITMQ_PASS=${SECRET_:env_RABBITMQPASS}",
             "OXALIS_HOME=/run/secrets"
@@ -24,7 +24,7 @@
       "mq/password": "${SECRET_:env_RABBITMQPASS}"
     },
     "oc-secret-injection": {
-      "oxalis-keystore.jks": {"encoding": "base64", "value": "${SECRET_develop_PEPPOLKEYSTORE}"},
+      "oxalis-keystore.jks": {"encoding": "base64", "value": "${SECRET_:env_PEPPOLKEYSTORE}"},
       "oxalis.conf": {"encoding": "base64", "value": "${OXALIS_CONF}"}
     }
   }

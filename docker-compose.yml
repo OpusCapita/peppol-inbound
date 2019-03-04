@@ -16,10 +16,10 @@ services:
       SERVICE_TAGS: 'kong'
     environment:
       PORT: 3037
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      RABBITMQ_USER: ${RABBITMQ_USER}
-      RABBITMQ_PASS: ${RABBITMQ_PASS}
+      MYSQL_ROOT_PASSWORD: ${SECRET_develop_RABBITMQPASS}
+      MYSQL_DATABASE: peppol-inbound
+      RABBITMQ_USER: ${SECRET_develop_RABBITMQUSER}
+      RABBITMQ_PASS: ${SECRET_develop_RABBITMQPASS}
       SERVICE_NAME: peppol-inbound
       SERVICE_3037_NAME: peppol-inbound
       SERVICE_3037_CHECK_HTTP: /api/health/check
@@ -39,8 +39,8 @@ services:
     labels:
       SERVICE_3306_NAME: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${SECRET_develop_RABBITMQPASS}
+      MYSQL_DATABASE: peppol-inbound
     depends_on:
       - registrator
 
@@ -52,8 +52,8 @@ services:
       - '5672:5672'
       - '15672:15672'
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+      RABBITMQ_DEFAULT_USER: ${SECRET_develop_RABBITMQUSER}
+      RABBITMQ_DEFAULT_PASS: ${SECRET_develop_RABBITMQPASS}
       SERVICE_5672_NAME: 'rabbitmq'
 
   redis:
