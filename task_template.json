@@ -7,11 +7,15 @@
     "publish":["mode=host,target=3037,published=3037,protocol=tcp"],
     "host":["consul:172.17.0.1"],
     "env":[
-           "SERVICE_NAME=${serviceName}",
-           "SERVICE_3037_CHECK_HTTP=/api/health/check",
-           "SERVICE_3037_CHECK_INTERVAL=15s",
-           "SERVICE_3037_CHECK_TIMEOUT=3s",
-           "OXALIS_HOME=/run/secrets"
+            "SERVICE_NAME=${serviceName}",
+            "SERVICE_3037_CHECK_HTTP=/api/health/check",
+            "SERVICE_3037_CHECK_INTERVAL=15s",
+            "SERVICE_3037_CHECK_TIMEOUT=3s",
+            "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}",
+            "MYSQL_DATABASE=${MYSQL_DATABASE}",
+            "RABBITMQ_USER=${SECRET_:env_RABBITMQUSER}",
+            "RABBITMQ_PASS=${SECRET_:env_RABBITMQPASS}",
+            "OXALIS_HOME=/run/secrets"
            ],
     "oc-db-init":{"populate-test-data":"true"},
     "oc-consul-injection":{

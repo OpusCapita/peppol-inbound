@@ -20,6 +20,7 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       RABBITMQ_USER: ${RABBITMQ_USER}
       RABBITMQ_PASS: ${RABBITMQ_PASS}
+      SERVICE_NAME: peppol-inbound
       SERVICE_3037_NAME: peppol-inbound
       SERVICE_3037_CHECK_HTTP: /api/health/check
       SERVICE_3037_CHECK_INTERVAL: 15s
@@ -53,7 +54,7 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
-      SERVICE_5672_NAME: 'rabbitmq-amqp'
+      SERVICE_5672_NAME: 'rabbitmq'
 
   redis:
     image: opuscapita/redis:dev
