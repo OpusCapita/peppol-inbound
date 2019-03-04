@@ -21,9 +21,6 @@ services:
       SERVICE_3037_CHECK_HTTP: /api/health/check
       SERVICE_3037_CHECK_INTERVAL: 15s
       SERVICE_3037_CHECK_TIMEOUT: 3s
-      MYSQL_USER: ${SERVICE_NAME}
-      MYSQL_DATABASE: ${SERVICE_NAME}
-      MYSQL_PASSWORD: ${SECRET_develop_MYSQL}
       RABBITMQ_USER: ${SECRET_develop_RABBITMQUSER}
       RABBITMQ_PASS: ${SECRET_develop_RABBITMQPASS}
       OXALIS_HOME: /usr/app/oxalis
@@ -40,10 +37,8 @@ services:
     labels:
       SERVICE_3306_NAME: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${SECRET_develop_MYSQL}
+      MYSQL_ROOT_PASSWORD: test
       MYSQL_DATABASE: ${SERVICE_NAME}
-      MYSQL_USER: ${SERVICE_NAME}
-      MYSQL_PASSWORD: ${SECRET_develop_MYSQL}
     depends_on:
       - registrator
 
