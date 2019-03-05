@@ -34,6 +34,7 @@
     },
     "oc-secret-injection": {
       "oxalis-keystore.jks": {
+        "type": "binary",
         "encoding": "base64",
         "value": "${SECRET_:env_PEPPOLKEYSTORE}"
       },
@@ -41,6 +42,7 @@
         "encoding": "base64",
         "value": "${OXALIS_CONF}"
       }
-    }
+    },
+    "oc-service-user-create-override": "true"
   }
 }
