@@ -24,9 +24,6 @@
       "RABBITMQ_PASS=${SECRET_:env_RABBITMQPASS}",
       "OXALIS_HOME=/run/secrets"
     ],
-    "oc-db-init": {
-      "populate-test-data": "true"
-    },
     "oc-consul-injection": {
       "redis/password": "${SECRET_:env_REDIS}",
       "mq/user": "${SECRET_:env_RABBITMQUSER}",

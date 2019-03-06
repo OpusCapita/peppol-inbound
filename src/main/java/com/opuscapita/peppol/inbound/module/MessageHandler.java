@@ -1,11 +1,10 @@
 package com.opuscapita.peppol.inbound.module;
 
 import com.opuscapita.peppol.commons.container.ContainerMessage;
-import com.opuscapita.peppol.commons.container.metadata.PeppolMessageMetadata;
-import com.opuscapita.peppol.commons.container.process.route.Endpoint;
-import com.opuscapita.peppol.commons.container.process.route.ProcessType;
-import com.opuscapita.peppol.commons.errors.ErrorHandler;
-import com.opuscapita.peppol.commons.events.EventingMessageUtil;
+import com.opuscapita.peppol.commons.container.PeppolMessageMetadata;
+import com.opuscapita.peppol.commons.container.state.Endpoint;
+import com.opuscapita.peppol.commons.container.state.ProcessType;
+import com.opuscapita.peppol.commons.eventing.TicketReporter;
 import com.opuscapita.peppol.commons.storage.Storage;
 import no.difi.oxalis.api.inbound.InboundMetadata;
 import org.jetbrains.annotations.NotNull;
@@ -28,14 +27,14 @@ public class MessageHandler {
     private String componentName;
 
     private final Storage storage;
-    private final ErrorHandler errorHandler;
     private final MessageSender messageSender;
+    private final TicketReporter ticketReporter;
 
     @Autowired
-    public MessageHandler(@NotNull Storage storage, @NotNull ErrorHandler errorHandler, @NotNull MessageSender messageSender) {
+    public MessageHandler(@NotNull Storage storage, @NotNull MessageSender messageSender, @NotNull TicketReporter ticketReporter) {
         this.storage = storage;
-        this.errorHandler = errorHandler;
         this.messageSender = messageSender;
+        this.ticketReporter = ticketReporter;
     }
 
     @NotNull
@@ -55,26 +54,26 @@ public class MessageHandler {
         }
     }
 
-    private void fail(String message, String transmissionId, Exception e) {
-        logger.error(message, e);
-        try {
-            errorHandler.reportWithoutContainerMessage(null, e, message, transmissionId, transmissionId + ".xml");
-        } catch (Exception ex) {
-            logger.error("Failed to report error '" + message + "'", ex);
-        }
-    }
-
     void process(InboundMetadata inboundMetadata, Path payloadPath) {
         ContainerMessage cm = createContainerMessage(payloadPath.toString());
-        cm.getProcessingInfo().setPeppolMessageMetadata(PeppolMessageMetadata.create(inboundMetadata));
+        cm.setMetadata(PeppolMessageMetadata.create(inboundMetadata));
         messageSender.send(cm);
     }
 
     private ContainerMessage createContainerMessage(String dataFile) {
         Endpoint endpoint = new Endpoint(componentName, ProcessType.IN_INBOUND);
         ContainerMessage cm = new ContainerMessage(dataFile, endpoint);
-        cm.setStatus(cm.getProcessingInfo().getSource(), "received");
-        EventingMessageUtil.reportEvent(cm, "received file");
+        cm.setStatus(endpoint, "received");
         return cm;
     }
+
+    private void fail(String message, String transmissionId, Exception e) {
+        logger.error(message, e);
+        try {
+            ticketReporter.reportWithoutContainerMessage(null, e, message, transmissionId, transmissionId + ".xml");
+        } catch (Exception ex) {
+            logger.error("Failed to report error '" + message + "'", ex);
+        }
+    }
+
 }

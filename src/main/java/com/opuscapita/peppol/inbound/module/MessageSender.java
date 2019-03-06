@@ -1,7 +1,7 @@
 package com.opuscapita.peppol.inbound.module;
 
 import com.opuscapita.peppol.commons.container.ContainerMessage;
-import com.opuscapita.peppol.commons.errors.ErrorHandler;
+import com.opuscapita.peppol.commons.eventing.TicketReporter;
 import com.opuscapita.peppol.commons.queue.MessageQueue;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -22,34 +22,32 @@ public class MessageSender {
     private String eventingQueue;
 
     private final MessageQueue messageQueue;
-    private final ErrorHandler errorHandler;
+    private final TicketReporter ticketReporter;
 
     @Autowired
-    public MessageSender(@NotNull MessageQueue messageQueue, @NotNull ErrorHandler errorHandler) {
+    public MessageSender(@NotNull MessageQueue messageQueue, @NotNull TicketReporter ticketReporter) {
         this.messageQueue = messageQueue;
-        this.errorHandler = errorHandler;
+        this.ticketReporter = ticketReporter;
     }
 
     // no exception must be thrown by this method
     // in case of a failure we have local file to reprocess
     void send(ContainerMessage cm) {
         try {
-            logger.debug("Sending message to " + outputQueue + " about file: " + cm.getFileName());
-
             messageQueue.convertAndSend(outputQueue, cm);
-
             logger.info("Message sent to " + outputQueue + ", about file " + cm.toLog());
         } catch (Exception e) {
             logger.error("Failed to report received file " + cm.getFileName() + " to queue " + outputQueue, e);
-            errorHandler.reportWithContainerMessage(cm, e, "Failed to report received file " + cm.getFileName() + " to queue " + outputQueue);
+            ticketReporter.reportWithContainerMessage(cm, e, "Failed to report received file " + cm.getFileName() + " to queue " + outputQueue);
             return;
         }
 
         try {
             messageQueue.convertAndSend(eventingQueue, cm);
+            logger.info("Message sent to " + eventingQueue + ", about file " + cm.toLog());
         } catch (Exception e) {
             logger.error("Failed to report received file " + cm.getFileName() + " status to " + eventingQueue + " queue");
-            errorHandler.reportWithContainerMessage(cm, e, "Failed to report file " + cm.getFileName() + " status to queue " + outputQueue);
+            ticketReporter.reportWithContainerMessage(cm, e, "Failed to report file " + cm.getFileName() + " status to queue " + outputQueue);
         }
     }
 }

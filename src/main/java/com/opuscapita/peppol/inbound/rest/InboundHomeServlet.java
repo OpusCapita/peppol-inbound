@@ -2,7 +2,7 @@ package com.opuscapita.peppol.inbound.rest;
 
 import com.google.gson.Gson;
 import com.google.inject.Singleton;
-import com.opuscapita.peppol.commons.template.rest.ApiListRestResponse;
+import com.opuscapita.peppol.commons.template.ApiListRestResponse;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
