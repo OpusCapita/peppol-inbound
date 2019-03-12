@@ -1,7 +1,7 @@
 package com.opuscapita.peppol.inbound.module;
 
 import com.opuscapita.peppol.commons.container.ContainerMessage;
-import com.opuscapita.peppol.commons.container.PeppolMessageMetadata;
+import com.opuscapita.peppol.commons.container.metadata.PeppolMessageMetadata;
 import com.opuscapita.peppol.commons.container.state.Endpoint;
 import com.opuscapita.peppol.commons.container.state.ProcessType;
 import com.opuscapita.peppol.commons.eventing.TicketReporter;
