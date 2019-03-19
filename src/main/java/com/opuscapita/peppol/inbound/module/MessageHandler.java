@@ -3,7 +3,8 @@ package com.opuscapita.peppol.inbound.module;
 import com.opuscapita.peppol.commons.container.ContainerMessage;
 import com.opuscapita.peppol.commons.container.metadata.PeppolMessageMetadata;
 import com.opuscapita.peppol.commons.container.state.Endpoint;
-import com.opuscapita.peppol.commons.container.state.ProcessType;
+import com.opuscapita.peppol.commons.container.state.ProcessFlow;
+import com.opuscapita.peppol.commons.container.state.ProcessStep;
 import com.opuscapita.peppol.commons.eventing.TicketReporter;
 import com.opuscapita.peppol.commons.storage.Storage;
 import no.difi.oxalis.api.inbound.InboundMetadata;
@@ -61,16 +62,16 @@ public class MessageHandler {
     }
 
     private ContainerMessage createContainerMessage(String dataFile) {
-        Endpoint endpoint = new Endpoint(componentName, ProcessType.IN_INBOUND);
+        Endpoint endpoint = new Endpoint(componentName, ProcessFlow.IN, ProcessStep.INBOUND);
         ContainerMessage cm = new ContainerMessage(dataFile, endpoint);
-        cm.setStatus(endpoint, "received");
+        cm.getHistory().addInfo("Received and stored");
         return cm;
     }
 
     private void fail(String message, String transmissionId, Exception e) {
         logger.error(message, e);
         try {
-            ticketReporter.reportWithoutContainerMessage(null, e, message, transmissionId, transmissionId + ".xml");
+            ticketReporter.reportWithoutContainerMessage(null, transmissionId + ".xml", e, message);
         } catch (Exception ex) {
             logger.error("Failed to report error '" + message + "'", ex);
         }

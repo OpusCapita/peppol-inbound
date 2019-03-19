@@ -35,7 +35,7 @@ public class MessageSender {
     void send(ContainerMessage cm) {
         try {
             messageQueue.convertAndSend(outputQueue, cm);
-            logger.info("Message sent to " + outputQueue + ", about file " + cm.toLog());
+            logger.info("Message sent to " + outputQueue + ", about file " + cm.toKibana());
         } catch (Exception e) {
             logger.error("Failed to report received file " + cm.getFileName() + " to queue " + outputQueue, e);
             ticketReporter.reportWithContainerMessage(cm, e, "Failed to report received file " + cm.getFileName() + " to queue " + outputQueue);
@@ -44,10 +44,11 @@ public class MessageSender {
 
         try {
             messageQueue.convertAndSend(eventingQueue, cm);
-            logger.info("Message sent to " + eventingQueue + ", about file " + cm.toLog());
+            logger.info("Message sent to " + eventingQueue + ", about file " + cm.toKibana());
         } catch (Exception e) {
             logger.error("Failed to report received file " + cm.getFileName() + " status to " + eventingQueue + " queue");
             ticketReporter.reportWithContainerMessage(cm, e, "Failed to report file " + cm.getFileName() + " status to queue " + outputQueue);
         }
     }
+
 }
