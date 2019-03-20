@@ -22,9 +22,7 @@
       "SERVICE_3037_CHECK_TIMEOUT=3s",
       "RABBITMQ_USER=${SECRET_:env_RABBITMQUSER}",
       "RABBITMQ_PASS=${SECRET_:env_RABBITMQPASS}",
-      "OXALIS_HOME=/usr/app/oxalis",
-      "OXALIS_CONF=${OXALIS_CONF}",
-      "OXALIS_CERT=${SECRET_:env_PEPPOLKEYSTORE}"
+      "OXALIS_HOME=/usr/app/oxalis"
     ],
     "oc-consul-injection": {
       "redis/password": "${SECRET_:env_REDIS}",
