@@ -34,10 +34,6 @@
         "type": "binary",
         "encoding": "base64",
         "value": "${SECRET_:env_PEPPOLKEYSTORE}"
-      },
-      "oxalis.conf": {
-        "encoding": "base64",
-        "value": "${OXALIS_CONF}"
       }
     },
     "oc-service-user-create-override": "true"
