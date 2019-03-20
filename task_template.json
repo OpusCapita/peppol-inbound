@@ -33,11 +33,11 @@
       "oxalis-keystore.jks": {
         "type": "binary",
         "encoding": "base64",
-        "value": "${TEMP2}"
+        "value": "${SECRET_:env_PEPPOLKEYSTORE}"
       },
       "oxalis.conf": {
         "encoding": "base64",
-        "value": "${TEMP1}"
+        "value": "${OXALIS_CONF}"
       }
     },
     "oc-service-user-create-override": "true"
