@@ -1,8 +1,5 @@
 package com.opuscapita.peppol.inbound;
 
-import com.opuscapita.peppol.inbound.module.MessageHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +10,6 @@ import javax.sql.DataSource;
 
 @Component
 public class InboundDataSource {
-
-    private static final Logger logger = LoggerFactory.getLogger(InboundDataSource.class);
 
     @Value("${db-init.user:root}")
     private String user;
@@ -28,9 +23,6 @@ public class InboundDataSource {
     @Bean
     @Primary
     public DataSource dataSource() {
-
-        logger.warn("User: " + user + ", pass: " + password + ", database: " + database );
-
         return DataSourceBuilder
                 .create()
                 .username(user)
@@ -39,4 +31,5 @@ public class InboundDataSource {
                 .driverClassName("com.mysql.jdbc.Driver")
                 .build();
     }
+
 }
