@@ -40,6 +40,7 @@ public class MessageHandler {
 
     @NotNull
     String preProcess(String transmissionId, InputStream inputStream) throws IOException {
+        logger.info("Received a message from the network with transmissionId: " + transmissionId);
         return storeTemporary(transmissionId, inputStream);
     }
 
@@ -47,7 +48,7 @@ public class MessageHandler {
     private String storeTemporary(String transmissionId, InputStream inputStream) throws IOException {
         try {
             String result = storage.putToTemporary(inputStream, transmissionId + ".xml");
-            logger.info("Received message stored as " + result);
+            logger.info("Received message stored temporarily to " + result);
             return result;
         } catch (Exception e) {
             fail("Failed to store message " + transmissionId + ".xml", transmissionId, e);

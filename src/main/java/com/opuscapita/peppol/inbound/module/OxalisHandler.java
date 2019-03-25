@@ -43,13 +43,13 @@ public class OxalisHandler implements PersisterHandler {
 
     @Override
     public void persist(InboundMetadata inboundMetadata, Path payloadPath) {
+        logger.info(inboundMetadataToString(inboundMetadata, payloadPath));
         messageHandler.process(inboundMetadata, payloadPath);
-
-        logger.info("Transmission receipt for " + payloadPath.toString() + ":\n" + inboundMetadataToString(inboundMetadata));
     }
 
-    private String inboundMetadataToString(InboundMetadata metadata) {
-        return "{" +
+    private String inboundMetadataToString(InboundMetadata metadata, Path payloadPath) {
+        return "TransmissionReceipt {" +
+                "tempPath=" + payloadPath.toString() +
                 "transmissionIdentifier=" + metadata.getTransmissionIdentifier().getIdentifier() +
                 ", header={" +
                 "   sender=" + metadata.getHeader().getSender().getIdentifier() +
@@ -65,4 +65,5 @@ public class OxalisHandler implements PersisterHandler {
                 ", tag='" + metadata.getTag().getIdentifier() +
                 '}';
     }
+
 }
