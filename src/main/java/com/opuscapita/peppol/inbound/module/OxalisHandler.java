@@ -50,7 +50,7 @@ public class OxalisHandler implements PersisterHandler {
     private String inboundMetadataToString(InboundMetadata metadata, Path payloadPath) {
         return "TransmissionReceipt {" +
                 "tempPath=" + payloadPath.toString() +
-                "transmissionIdentifier=" + metadata.getTransmissionIdentifier().getIdentifier() +
+                ", transmissionIdentifier=" + metadata.getTransmissionIdentifier().getIdentifier() +
                 ", header={" +
                 "   sender=" + metadata.getHeader().getSender().getIdentifier() +
                 ",  receiver=" + metadata.getHeader().getReceiver().getIdentifier() +
