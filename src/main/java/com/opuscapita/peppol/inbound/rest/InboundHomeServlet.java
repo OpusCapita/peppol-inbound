@@ -33,8 +33,8 @@ public class InboundHomeServlet extends HttpServlet {
 
     private void getList(HttpServletResponse resp) throws IOException {
         List<ApiListRestResponse> apiList = new ArrayList<>();
-        apiList.add(new ApiListRestResponse("/public/a2a", "/public/a2a"));
-        apiList.add(new ApiListRestResponse("/public/xib", "/public/xib"));
+        apiList.add(new ApiListRestResponse("/private/a2a", "/private/a2a"));
+        apiList.add(new ApiListRestResponse("/private/xib", "/private/xib"));
         apiList.add(new ApiListRestResponse("/public/as2", "/public/as2"));
         apiList.add(new ApiListRestResponse("/public/status", "/public/status"));
         resp.getWriter().print(new Gson().toJson(apiList));
