@@ -1,6 +1,6 @@
 package com.opuscapita.peppol.inbound;
 
-import com.opuscapita.peppol.inbound.module.MessageHandler;
+import com.opuscapita.peppol.inbound.network.MessageHandler;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -19,11 +19,11 @@ import java.io.IOException;
 @ComponentScan({"com.opuscapita.peppol.inbound", "com.opuscapita.peppol.commons", "no.difi.oxalis.as2.inbound"})
 public class InboundApp {
 
-    private static MessageHandler mh;
+    private static MessageHandler messageHandler;
 
     @Autowired
-    public InboundApp(@NotNull MessageHandler messageHandler) {
-        mh = messageHandler;
+    public InboundApp(@NotNull MessageHandler commonMessageHandler) {
+        messageHandler = commonMessageHandler;
     }
 
     public static void main(String[] args) {
@@ -44,7 +44,7 @@ public class InboundApp {
      */
     @NotNull
     public static MessageHandler getMessageHandler() {
-        return mh;
+        return messageHandler;
     }
 
     /**
@@ -69,4 +69,5 @@ public class InboundApp {
             FileUtils.writeByteArrayToFile(file, DatatypeConverter.parseBase64Binary(cert));
         }
     }
+
 }

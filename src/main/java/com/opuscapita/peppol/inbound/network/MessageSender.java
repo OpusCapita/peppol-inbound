@@ -1,4 +1,4 @@
-package com.opuscapita.peppol.inbound.module;
+package com.opuscapita.peppol.inbound.network;
 
 import com.opuscapita.peppol.commons.container.ContainerMessage;
 import com.opuscapita.peppol.commons.eventing.TicketReporter;

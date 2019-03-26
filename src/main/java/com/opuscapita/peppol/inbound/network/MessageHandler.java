@@ -1,18 +1,20 @@
-package com.opuscapita.peppol.inbound.module;
+package com.opuscapita.peppol.inbound.network;
 
 import com.opuscapita.peppol.commons.container.ContainerMessage;
+import com.opuscapita.peppol.commons.container.metadata.OcTransmissionResult;
 import com.opuscapita.peppol.commons.container.metadata.PeppolMessageMetadata;
 import com.opuscapita.peppol.commons.container.state.Endpoint;
 import com.opuscapita.peppol.commons.container.state.ProcessFlow;
 import com.opuscapita.peppol.commons.container.state.ProcessStep;
+import com.opuscapita.peppol.commons.container.state.Source;
 import com.opuscapita.peppol.commons.eventing.TicketReporter;
 import com.opuscapita.peppol.commons.storage.Storage;
 import no.difi.oxalis.api.inbound.InboundMetadata;
+import no.difi.vefa.peppol.common.model.Header;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -23,9 +25,6 @@ import java.nio.file.Path;
 public class MessageHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
-
-    @Value("${spring.application.name}")
-    private String componentName;
 
     private final Storage storage;
     private final MessageSender messageSender;
@@ -38,41 +37,39 @@ public class MessageHandler {
         this.ticketReporter = ticketReporter;
     }
 
-    @NotNull
-    String preProcess(String transmissionId, InputStream inputStream) throws IOException {
-        logger.info("Received a message from the network with transmissionId: " + transmissionId);
-        return storeTemporary(transmissionId, inputStream);
-    }
-
-    // this is the only method that allowed to throw an exception which will be propagated to the sending party
-    private String storeTemporary(String transmissionId, InputStream inputStream) throws IOException {
-        try {
-            String result = storage.putToTemporary(inputStream, transmissionId + ".xml");
-            logger.info("Received message stored temporarily to " + result);
-            return result;
-        } catch (Exception e) {
-            fail("Failed to store message " + transmissionId + ".xml", transmissionId, e);
-            throw new IOException("Failed to store message " + transmissionId + ".xml: " + e.getMessage(), e);
-        }
-    }
-
-    void process(InboundMetadata inboundMetadata, Path payloadPath) {
-        ContainerMessage cm = createContainerMessage(payloadPath.toString());
+    void process(InboundMetadata inboundMetadata, Path payloadPath, Source source) {
+        ContainerMessage cm = createContainerMessage(payloadPath.toString(), source);
         cm.setMetadata(PeppolMessageMetadata.create(inboundMetadata));
         messageSender.send(cm);
     }
 
-    private ContainerMessage createContainerMessage(String dataFile) {
-        Endpoint endpoint = new Endpoint(componentName, ProcessFlow.IN, ProcessStep.INBOUND);
+    void process(Header header, String filePath, Source source) {
+        ContainerMessage cm = createContainerMessage(filePath, source);
+        cm.setMetadata(PeppolMessageMetadata.create(new OcTransmissionResult(header)));
+        messageSender.send(cm);
+    }
+
+    private ContainerMessage createContainerMessage(String dataFile, Source source) {
+        Endpoint endpoint = new Endpoint(source, ProcessFlow.IN, ProcessStep.INBOUND);
         ContainerMessage cm = new ContainerMessage(dataFile, endpoint);
         cm.getHistory().addInfo("Received and stored");
         return cm;
     }
 
-    private void fail(String message, String transmissionId, Exception e) {
+    // this is the only method that allowed to throw an exception which will be propagated to the sending party
+    String store(String filename, InputStream inputStream) throws IOException {
+        try {
+            return storage.putToTemporary(inputStream, filename);
+        } catch (Exception e) {
+            fail("Failed to store message " + filename, filename, e);
+            throw new IOException("Failed to store message " + filename + ", reason: " + e.getMessage(), e);
+        }
+    }
+
+    private void fail(String message, String filename, Exception e) {
         logger.error(message, e);
         try {
-            ticketReporter.reportWithoutContainerMessage(null, transmissionId + ".xml", e, message);
+            ticketReporter.reportWithoutContainerMessage(null, filename, e, message);
         } catch (Exception ex) {
             logger.error("Failed to report error '" + message + "'", ex);
         }

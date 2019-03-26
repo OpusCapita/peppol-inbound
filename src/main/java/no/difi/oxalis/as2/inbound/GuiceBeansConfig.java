@@ -1,7 +1,8 @@
 package no.difi.oxalis.as2.inbound;
 
 import com.google.inject.Injector;
-import com.opuscapita.peppol.inbound.module.InboundModule;
+import com.opuscapita.peppol.inbound.InboundModule;
+import com.opuscapita.peppol.inbound.rest.InboundBusinessServlet;
 import com.opuscapita.peppol.inbound.rest.InboundHomeServlet;
 import com.opuscapita.peppol.inbound.rest.InboundStatusServlet;
 import no.difi.oxalis.commons.guice.GuiceModuleLoader;
@@ -37,6 +38,14 @@ public class GuiceBeansConfig {
     }
 
     @Bean
+    public ServletRegistrationBean<HttpServlet> businessServletBean() {
+        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
+                injector.getInstance(InboundBusinessServlet.class), "/public/a2a", "/public/xib");
+        bean.setLoadOnStartup(1);
+        return bean;
+    }
+
+    @Bean
     public ServletRegistrationBean<HttpServlet> as2ServletBean() {
         ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
                 injector.getInstance(As2Servlet.class), "/public/as2");
@@ -54,4 +63,5 @@ public class GuiceBeansConfig {
         filter.setAfterMessagePrefix("REQUEST DATA : ");
         return filter;
     }
+
 }
