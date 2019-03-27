@@ -21,10 +21,7 @@ public class GuiceBeansConfig {
 
     @Bean
     public ServletRegistrationBean<HttpServlet> homeServletBean() {
-        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(new InboundHomeServlet(),
-                "/",
-                "/api/health/check",
-                "/api/list/apis");
+        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(new InboundHomeServlet(), "/", "/api/health/check");
         bean.setLoadOnStartup(1);
         return bean;
     }
