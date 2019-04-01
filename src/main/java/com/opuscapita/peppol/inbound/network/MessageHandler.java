@@ -52,7 +52,7 @@ public class MessageHandler {
     private ContainerMessage createContainerMessage(String dataFile, Source source) {
         Endpoint endpoint = new Endpoint(source, ProcessFlow.IN, ProcessStep.INBOUND);
         ContainerMessage cm = new ContainerMessage(dataFile, endpoint);
-        cm.getHistory().addInfo("Received and stored");
+        cm.getHistory().addInfo("Received file from " + source);
         return cm;
     }
 
