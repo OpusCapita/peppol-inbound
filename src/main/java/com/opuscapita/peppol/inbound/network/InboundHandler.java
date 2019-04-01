@@ -8,6 +8,7 @@ import no.difi.oxalis.api.model.TransmissionIdentifier;
 import no.difi.oxalis.api.persist.PersisterHandler;
 import no.difi.oxalis.api.util.Type;
 import no.difi.vefa.peppol.common.model.Header;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +55,7 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
     // file coming from business platform: source, both payload and receipt persistence
     @Override
     public void persist(String filename, Source source, Header header, InputStream inputStream) throws IOException {
+        filename = StringUtils.isBlank(filename) ? header.getIdentifier().getIdentifier() + ".xml" : filename;
         logger.info("Received a message from " + source.name() + ", storing content as: " + filename);
         String dataFile = messageHandler.store(filename, inputStream);
 

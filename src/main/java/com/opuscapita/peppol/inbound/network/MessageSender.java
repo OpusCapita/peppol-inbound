@@ -32,7 +32,11 @@ public class MessageSender {
     // no exception must be thrown by this method
     // in case of a failure we have local file to reprocess
     void send(ContainerMessage cm) {
-        eventReporter.reportStatus(cm);
+        try {
+            eventReporter.reportStatus(cm);
+        } catch (Exception e) {
+            logger.error("Failed to report received file " + cm.getFileName() + " status to monitoring queue");
+        }
 
         try {
             messageQueue.convertAndSend(outputQueue, cm);
