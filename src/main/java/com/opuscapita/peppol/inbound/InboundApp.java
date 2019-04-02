@@ -1,6 +1,7 @@
 package com.opuscapita.peppol.inbound;
 
 import com.opuscapita.peppol.inbound.network.MessageHandler;
+import com.opuscapita.peppol.inbound.util.FileUpdateUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -11,8 +12,10 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 @EnableCaching
 @SpringBootApplication
@@ -61,8 +64,12 @@ public class InboundApp {
         String cert = System.getenv("OXALIS_CERT");
 
         if (StringUtils.isNotBlank(conf)) {
+            String key = "oxalis.database.jdbc.password";
+
             File file = new File(oxalisHome + "/oxalis.conf");
-            FileUtils.writeByteArrayToFile(file, DatatypeConverter.parseBase64Binary(conf));
+            InputStream content = new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(conf));
+            InputStream updated = FileUpdateUtils.startAndReplace(content, key, key + "=test");
+            FileUtils.copyInputStreamToFile(updated, file);
         }
         if (StringUtils.isNotBlank(cert)) {
             File file = new File(oxalisHome + "/oxalis-keystore.jks");
