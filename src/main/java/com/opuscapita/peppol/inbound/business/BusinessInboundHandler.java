@@ -3,6 +3,7 @@ package com.opuscapita.peppol.inbound.business;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.opuscapita.peppol.commons.container.state.Source;
+import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
 import no.difi.oxalis.api.header.HeaderParser;
 import no.difi.vefa.peppol.common.model.Header;
 
@@ -21,12 +22,23 @@ public class BusinessInboundHandler {
     }
 
     public void receive(final HttpServletRequest request) throws Exception {
-        InputStream inputStream = request.getInputStream();
-        Header header = headerParser.parse(inputStream);
-        String filename = request.getParameter("filename");
-        Source source = getSource(request);
+        ServletRequestWrapper wrapper = new ServletRequestWrapper(request);
 
-        persisterHandler.persist(filename, source, header, inputStream);
+        Source source = getSource(request);
+        String filename = request.getParameter("filename");
+
+        Header header;
+        try (InputStream inputStream = wrapper.getInputStream()) {
+            header = headerParser.parse(inputStream);
+        }
+
+        if (header == null) {
+            // TODO: return something to sender and stop processing
+        }
+
+        try (InputStream inputStream = wrapper.getInputStream()) {
+            persisterHandler.persist(filename, source, header, inputStream);
+        }
     }
 
     private Source getSource(HttpServletRequest request) {
