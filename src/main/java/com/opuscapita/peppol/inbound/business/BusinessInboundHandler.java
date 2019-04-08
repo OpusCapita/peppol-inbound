@@ -6,7 +6,6 @@ import com.opuscapita.peppol.commons.container.state.Source;
 import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.InputStream;
 
 public class BusinessInboundHandler {
 
@@ -23,9 +22,7 @@ public class BusinessInboundHandler {
         Source source = getSource(request);
         String filename = request.getParameter("filename");
 
-        try (InputStream inputStream = wrapper.getInputStream()) {
-            persisterHandler.persist(filename, source, inputStream);
-        }
+        persisterHandler.persist(filename, source, wrapper);
     }
 
     private Source getSource(HttpServletRequest request) {

@@ -2,7 +2,6 @@ package com.opuscapita.peppol.inbound.rest;
 
 import org.apache.commons.io.IOUtils;
 
-import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -18,7 +17,6 @@ public class ServletRequestWrapper extends HttpServletRequestWrapper {
 
     public ServletRequestWrapper(HttpServletRequest request) {
         super(request);
-
         try {
             body = IOUtils.toByteArray(request.getInputStream());
         } catch (IOException ex) {
@@ -28,29 +26,7 @@ public class ServletRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public ServletInputStream getInputStream() throws IOException {
-        return new ServletInputStream() {
-
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(body);
-
-            @Override
-            public boolean isFinished() {
-                return false;
-            }
-
-            @Override
-            public boolean isReady() {
-                return false;
-            }
-
-            @Override
-            public void setReadListener(ReadListener listener) {
-            }
-
-            @Override
-            public int read() throws IOException {
-                return byteArrayInputStream.read();
-            }
-        };
+        return new OcServletInputStream(new ByteArrayInputStream(body));
     }
 
 }

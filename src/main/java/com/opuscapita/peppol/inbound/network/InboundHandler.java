@@ -4,6 +4,7 @@ import com.opuscapita.peppol.commons.container.metadata.ContainerMessageMetadata
 import com.opuscapita.peppol.commons.container.state.Source;
 import com.opuscapita.peppol.inbound.InboundApp;
 import com.opuscapita.peppol.inbound.business.BusinessInboundPersister;
+import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
 import no.difi.oxalis.api.inbound.InboundMetadata;
 import no.difi.oxalis.api.model.TransmissionIdentifier;
 import no.difi.oxalis.api.persist.PersisterHandler;
@@ -59,12 +60,12 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
 
     // file coming from business platform: source, both payload and receipt persistence
     @Override
-    public void persist(String filename, Source source, InputStream inputStream) throws IOException {
-        ContainerMessageMetadata metadata = messageHandler.extractMetadata(inputStream);
+    public void persist(String filename, Source source, ServletRequestWrapper wrapper) throws IOException {
+        ContainerMessageMetadata metadata = messageHandler.extractMetadata(wrapper.getInputStream());
         filename = StringUtils.isBlank(filename) ? metadata.getMessageId() + ".xml" : filename;
 
         logger.info("Received a message from " + source.name() + ", storing content as: " + filename);
-        String dataFile = messageHandler.store(filename, inputStream);
+        String dataFile = messageHandler.store(filename, wrapper.getInputStream());
 
         logReceipt(metadata, source, dataFile);
         messageHandler.process(metadata, source, dataFile);
