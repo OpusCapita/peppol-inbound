@@ -4,20 +4,16 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.opuscapita.peppol.commons.container.state.Source;
 import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
-import no.difi.oxalis.api.header.HeaderParser;
-import no.difi.vefa.peppol.common.model.Header;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 
 public class BusinessInboundHandler {
 
-    private final HeaderParser headerParser;
     private final BusinessInboundPersister persisterHandler;
 
     @Inject
-    public BusinessInboundHandler(HeaderParser headerParser, @Named("opuscapita") BusinessInboundPersister persisterHandler) {
-        this.headerParser = headerParser;
+    public BusinessInboundHandler(@Named("opuscapita") BusinessInboundPersister persisterHandler) {
         this.persisterHandler = persisterHandler;
     }
 
@@ -27,17 +23,8 @@ public class BusinessInboundHandler {
         Source source = getSource(request);
         String filename = request.getParameter("filename");
 
-        Header header;
         try (InputStream inputStream = wrapper.getInputStream()) {
-            header = headerParser.parse(inputStream);
-        }
-
-        if (header == null) {
-            // TODO: return something to sender and stop processing
-        }
-
-        try (InputStream inputStream = wrapper.getInputStream()) {
-            persisterHandler.persist(filename, source, header, inputStream);
+            persisterHandler.persist(filename, source, inputStream);
         }
     }
 

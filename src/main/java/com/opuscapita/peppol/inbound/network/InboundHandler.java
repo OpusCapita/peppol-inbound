@@ -1,5 +1,6 @@
 package com.opuscapita.peppol.inbound.network;
 
+import com.opuscapita.peppol.commons.container.metadata.ContainerMessageMetadata;
 import com.opuscapita.peppol.commons.container.state.Source;
 import com.opuscapita.peppol.inbound.InboundApp;
 import com.opuscapita.peppol.inbound.business.BusinessInboundPersister;
@@ -31,8 +32,8 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
 
     private final MessageHandler messageHandler;
 
+    // this is done to separate Spring dependency injection from Guice one (we're in Guice now, while messageHandler is in Spring)
     public InboundHandler() {
-        // this is done to separate Spring dependency injection from Guice one (we're in Guice now, while messageHandler is in Spring)
         messageHandler = InboundApp.getMessageHandler();
         logger.info("OpusCapita inbound receiver initialized");
     }
@@ -48,32 +49,39 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
     // file coming from network: oxalis receipt persister
     @Override
     public void persist(InboundMetadata inboundMetadata, Path payloadPath) {
-        logger.info(metadataToString(inboundMetadata.getHeader(), payloadPath.toString(), Source.NETWORK));
-        messageHandler.process(inboundMetadata, payloadPath, Source.NETWORK);
+        Source source = Source.NETWORK;
+        String filename = payloadPath.toString();
+        ContainerMessageMetadata metadata = ContainerMessageMetadata.create(inboundMetadata);
+
+        logReceipt(metadata, source, filename);
+        messageHandler.process(metadata, source, filename);
     }
 
     // file coming from business platform: source, both payload and receipt persistence
     @Override
-    public void persist(String filename, Source source, Header header, InputStream inputStream) throws IOException {
-        filename = StringUtils.isBlank(filename) ? header.getIdentifier().getIdentifier() + ".xml" : filename;
+    public void persist(String filename, Source source, InputStream inputStream) throws IOException {
+        ContainerMessageMetadata metadata = messageHandler.extractMetadata(inputStream);
+        filename = StringUtils.isBlank(filename) ? metadata.getMessageId() + ".xml" : filename;
+
         logger.info("Received a message from " + source.name() + ", storing content as: " + filename);
         String dataFile = messageHandler.store(filename, inputStream);
 
-        logger.info(metadataToString(header, dataFile, source));
-        messageHandler.process(header, dataFile, source);
+        logReceipt(metadata, source, dataFile);
+        messageHandler.process(metadata, source, dataFile);
     }
 
-    private String metadataToString(Header header, String filename, Source source) {
-        return "TransmissionReceipt {filename=" + filename +
+    private void logReceipt(ContainerMessageMetadata metadata, Source source, String filename) {
+        logger.info("TransmissionReceipt {filename=" + filename +
                 ", source=" + source.name() +
-                ", sender=" + header.getSender().getIdentifier() +
-                ", receiver=" + header.getReceiver().getIdentifier() +
-                ", process=" + header.getProcess().getIdentifier() +
-                ", documentType=" + header.getDocumentType().getIdentifier() +
-                ", identifier=" + header.getIdentifier().getIdentifier() +
-                ", instanceType=" + header.getInstanceType().toString() +
-                ", creationTimestamp=" + header.getCreationTimestamp() +
-                '}';
+                ", sender=" + metadata.getSenderId() +
+                ", receiver=" + metadata.getRecipientId() +
+                ", profile=" + metadata.getProfileTypeIdentifier() +
+                ", documentType=" + metadata.getProfileTypeIdentifier() +
+                ", messageId=" + metadata.getMessageId() +
+                ", transmissionId=" + metadata.getTransmissionId() +
+                ", instanceType=" + metadata.getInstanceType() +
+                ", timestamp=" + metadata.getTimestamp() +
+                "}");
     }
 
 }
