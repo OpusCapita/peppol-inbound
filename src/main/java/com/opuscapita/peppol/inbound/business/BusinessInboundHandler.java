@@ -27,6 +27,9 @@ public class BusinessInboundHandler {
 
     private Source getSource(HttpServletRequest request) {
         String uri = request.getRequestURI();
+        if (uri.contains("reprocess")) {
+            return Source.valueOf(request.getParameter("source"));
+        }
         if (uri.contains("a2a")) {
             return Source.A2A;
         }

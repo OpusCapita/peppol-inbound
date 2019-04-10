@@ -37,7 +37,7 @@ public class GuiceBeansConfig {
     @Bean
     public ServletRegistrationBean<HttpServlet> businessServletBean() {
         ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
-                injector.getInstance(InboundBusinessServlet.class), "/a2a", "/xib");
+                injector.getInstance(InboundBusinessServlet.class), "/a2a", "/xib", "/reprocess");
         bean.setLoadOnStartup(1);
         return bean;
     }
