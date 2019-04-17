@@ -7,6 +7,7 @@ import com.opuscapita.peppol.commons.container.state.ProcessStep;
 import com.opuscapita.peppol.commons.container.state.Source;
 import com.opuscapita.peppol.commons.eventing.TicketReporter;
 import com.opuscapita.peppol.commons.storage.Storage;
+import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 @Component
 public class MessageHandler {
@@ -51,8 +53,21 @@ public class MessageHandler {
         }
     }
 
-    ContainerMessageMetadata extractMetadata(InputStream content) {
-        return metadataExtractor.extract(content);
+    ContainerMessageMetadata extractMetadata(ServletRequestWrapper wrapper) throws IOException {
+        ContainerMessageMetadata metadata = metadataExtractor.extract(wrapper.getInputStream());
+        if (metadata != null) {
+            return metadata;
+        }
+
+        metadata = metadataExtractor.extractFromPayload(wrapper.getInputStream());
+        if (metadata != null) {
+            return metadata;
+        }
+
+        metadata = new ContainerMessageMetadata();
+        metadata.setTransmissionId(UUID.randomUUID().toString());
+        metadata.setMessageId(UUID.randomUUID().toString());
+        return metadata;
     }
 
     private void fail(String message, String filename, Exception e) {

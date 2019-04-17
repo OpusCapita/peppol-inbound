@@ -61,7 +61,7 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
     // file coming from business platform: source, both payload and receipt persistence
     @Override
     public void persist(String filename, Source source, ServletRequestWrapper wrapper) throws IOException {
-        ContainerMessageMetadata metadata = messageHandler.extractMetadata(wrapper.getInputStream());
+        ContainerMessageMetadata metadata = messageHandler.extractMetadata(wrapper);
         filename = StringUtils.isBlank(filename) ? metadata.getMessageId() + ".xml" : filename;
 
         logger.info("Received a message from " + source.name() + ", storing content as: " + filename);
@@ -77,7 +77,7 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
                 ", sender=" + metadata.getSenderId() +
                 ", receiver=" + metadata.getRecipientId() +
                 ", profile=" + metadata.getProfileTypeIdentifier() +
-                ", documentType=" + metadata.getProfileTypeIdentifier() +
+                ", documentType=" + metadata.getDocumentTypeIdentifier() +
                 ", messageId=" + metadata.getMessageId() +
                 ", transmissionId=" + metadata.getTransmissionId() +
                 ", instanceType=" + metadata.getInstanceType() +
