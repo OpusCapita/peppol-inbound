@@ -42,8 +42,9 @@ public class MessageSender {
             messageQueue.convertAndSend(outputQueue, cm);
             logger.info("Message sent to " + outputQueue + " queue, about file " + cm.toKibana());
         } catch (Exception e) {
-            logger.error("Failed to report received file " + cm.getFileName() + " to queue " + outputQueue, e);
-            ticketReporter.reportWithContainerMessage(cm, e, "Failed to report received file " + cm.getFileName() + " to queue " + outputQueue);
+            String shortDescription = "Failed to report received file " + cm.getFileName() + " to queue: " + outputQueue;
+            logger.error(shortDescription, e);
+            ticketReporter.reportWithContainerMessage(cm, e, shortDescription);
         }
     }
 
