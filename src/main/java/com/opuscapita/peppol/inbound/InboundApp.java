@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-@EnableCaching
 @SpringBootApplication
 @ComponentScan({"com.opuscapita.peppol.inbound", "com.opuscapita.peppol.commons", "no.difi.oxalis.as2.inbound"})
 public class InboundApp {
