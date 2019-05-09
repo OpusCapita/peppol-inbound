@@ -7,10 +7,12 @@ import com.opuscapita.peppol.commons.container.state.ProcessStep;
 import com.opuscapita.peppol.commons.container.state.Source;
 import com.opuscapita.peppol.commons.eventing.TicketReporter;
 import com.opuscapita.peppol.commons.storage.Storage;
+import com.opuscapita.peppol.commons.storage.StorageUtils;
 import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -21,6 +23,9 @@ import java.util.UUID;
 public class MessageHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
+
+    @Value("${peppol.storage.blob.hot:hot}")
+    private String hotFolder;
 
     private final Storage storage;
     private final MessageSender messageSender;
@@ -44,9 +49,11 @@ public class MessageHandler {
     }
 
     // this is the only method that allowed to throw an exception which will be propagated to the sending party
-    String store(String filename, InputStream inputStream) throws IOException {
+    String store(String filename, Source source, InputStream inputStream) throws IOException {
         try {
-            return storage.putToTemporary(inputStream, filename);
+            String path = hotFolder + StorageUtils.FILE_SEPARATOR + source.name().toLowerCase();
+            path = StorageUtils.createDailyPath(path, "");
+            return storage.put(inputStream, path, filename);
         } catch (Exception e) {
             fail("Failed to store message " + filename, filename, e);
             throw new IOException("Failed to store message " + filename + ", reason: " + e.getMessage(), e);

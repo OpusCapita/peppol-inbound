@@ -44,7 +44,7 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
     public Path persist(TransmissionIdentifier transmissionIdentifier, Header header, InputStream inputStream) throws IOException {
         String filename = header.getIdentifier().getIdentifier() + ".xml";
         logger.info("Received a message from NETWORK, storing content as: " + filename);
-        return Paths.get(messageHandler.store(filename, inputStream));
+        return Paths.get(messageHandler.store(filename, Source.NETWORK, inputStream));
     }
 
     // file coming from network: oxalis receipt persister
@@ -65,7 +65,7 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
         filename = StringUtils.isBlank(filename) ? metadata.getMessageId() + ".xml" : filename;
 
         logger.info("Received a message from " + source.name() + ", storing content as: " + filename);
-        String dataFile = messageHandler.store(filename, wrapper.getInputStream());
+        String dataFile = messageHandler.store(filename, source, wrapper.getInputStream());
 
         logReceipt(metadata, source, dataFile);
         messageHandler.process(metadata, source, dataFile);
