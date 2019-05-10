@@ -75,8 +75,7 @@ workflows:
   version: 2
   commit:
     jobs:
-      - build:
-          context: peppol
+      - build
   nightly:
     triggers:
       - schedule:
@@ -87,5 +86,4 @@ workflows:
                 - develop
                 - nbp
     jobs:
-      - build_base:
-          context: peppol
+      - build_base
