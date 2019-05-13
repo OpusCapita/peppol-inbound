@@ -21,9 +21,9 @@
       "mq/password": "${SECRET_:env_RABBITMQPASS}",
 
       "snc/enabled": "true",
-      "snc/rest/url": "${SECRET_:env_SNCURL}",
-      "snc/rest/username": "${SECRET_:env_SNCUSER}",
-      "snc/rest/password": "${SECRET_:env_SNCPASS}",
+      "snc/rest/url": "${PEPPOL_:env_SNCURL}",
+      "snc/rest/username": "${PEPPOL_:env_SNCUSER}",
+      "snc/rest/password": "${PEPPOL_:env_SNCPASS}",
       "snc/bsc": "peppol-AP",
       "snc/from": "peppol-AP@",
       "snc/businessGroup": "Itella Information"
