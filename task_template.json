@@ -19,9 +19,9 @@
       "redis/password": "${SECRET_:env_REDIS}",
       "mq/user": "${SECRET_:env_RABBITMQUSER}",
       "mq/password": "${SECRET_:env_RABBITMQPASS}",
-
       "snc/enabled": "true",
       "snc/rest/url": "${PEPPOL_:env_SNCURL}",
+      "snc/rest/scope": "${PEPPOL_:env_SNCSCOPE}",
       "snc/rest/username": "${PEPPOL_:env_SNCUSER}",
       "snc/rest/password": "${PEPPOL_:env_SNCPASS}",
       "snc/bsc": "peppol-AP",
@@ -29,8 +29,8 @@
       "snc/businessGroup": "Itella Information"
     },
     "oc-secret-injection": {
-      "oxalis-keystore.jks": {"type": "binary", "encoding": "base64", "value": "${SECRET_:env_PEPPOLKEYSTORE}"},
-      "oxalis.conf": {"encoding": "base64", "value": "${OXALIS_:env_CONF}"}
+      "oxalis-keystore.jks": {"type": "binary", "encoding": "base64", "value": "${PEPPOL_:env_KEYSTORE}"},
+      "oxalis.conf": {"encoding": "base64", "value": "${PEPPOL_:env_OXALIS}"}
     },
     "limit-cpu": "0.2",
     "limit-memory": "900M",
