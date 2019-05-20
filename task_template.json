@@ -1,5 +1,6 @@
 {
   "default": {
+    "replicas": 1,
     "name": "${serviceName}",
     "log-driver": "gelf",
     "log-opt": ["gelf-address=udp://${logstash_ip}:12201", "tag=\"${serviceName}\""],
