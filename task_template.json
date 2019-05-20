@@ -38,7 +38,7 @@
     "reserve-memory": "500M",
     "oc-service-user-create-override": "true"
   },
-  "develop": {
+  "prod": {
     "replicas": 2
   }
 }
