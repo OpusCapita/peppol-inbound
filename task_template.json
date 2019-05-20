@@ -37,5 +37,8 @@
     "reserve-cpu": "0.1",
     "reserve-memory": "500M",
     "oc-service-user-create-override": "true"
+  },
+  "develop": {
+    "replicas": 2
   }
 }
