@@ -5,6 +5,7 @@ import com.opuscapita.peppol.inbound.InboundModule;
 import com.opuscapita.peppol.inbound.rest.InboundBusinessServlet;
 import com.opuscapita.peppol.inbound.rest.InboundHomeServlet;
 import com.opuscapita.peppol.inbound.rest.InboundStatusServlet;
+import com.opuscapita.peppol.inbound.rest.StatisticsServlet;
 import no.difi.oxalis.commons.guice.GuiceModuleLoader;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,14 @@ public class GuiceBeansConfig {
     public ServletRegistrationBean<HttpServlet> statusServletBean() {
         ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
                 injector.getInstance(InboundStatusServlet.class), "/public/status");
+        bean.setLoadOnStartup(1);
+        return bean;
+    }
+
+    @Bean
+    public ServletRegistrationBean<HttpServlet> statisticsServletBean() {
+        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
+                injector.getInstance(StatisticsServlet.class), "/statistics");
         bean.setLoadOnStartup(1);
         return bean;
     }
