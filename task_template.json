@@ -14,6 +14,7 @@
       "SERVICE_3037_CHECK_TIMEOUT=3s",
       "RABBITMQ_USER=${SECRET_:env_RABBITMQUSER}",
       "RABBITMQ_PASS=${SECRET_:env_RABBITMQPASS}",
+      "JAVA_OPTS=-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm",
       "OXALIS_HOME=/run/secrets"
     ],
     "oc-consul-injection": {

@@ -62,18 +62,18 @@ public class MessageHandler {
 
     ContainerMessageMetadata extractMetadata(ServletRequestWrapper wrapper) throws IOException {
         ContainerMessageMetadata metadata = metadataExtractor.extract(wrapper.getInputStream());
-        if (metadata != null) {
-            return metadata;
+
+        if (metadata == null) {
+            metadata = metadataExtractor.extractFromPayload(wrapper.getInputStream());
         }
 
-        metadata = metadataExtractor.extractFromPayload(wrapper.getInputStream());
-        if (metadata != null) {
-            return metadata;
+        if (metadata == null) {
+            metadata = new ContainerMessageMetadata();
+            metadata.setTransmissionId(UUID.randomUUID().toString());
+            metadata.setMessageId(UUID.randomUUID().toString());
         }
 
-        metadata = new ContainerMessageMetadata();
-        metadata.setTransmissionId(UUID.randomUUID().toString());
-        metadata.setMessageId(UUID.randomUUID().toString());
+        metadata.setBusinessMetadata(metadataExtractor.extractBusinessMetadata(wrapper.getInputStream()));
         return metadata;
     }
 
