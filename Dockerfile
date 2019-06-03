@@ -15,6 +15,7 @@ RUN ./gradlew build || return 0
 ## actual container
 FROM openjdk:8
 LABEL author="Ibrahim Bilge <Ibrahim.Bilge@opuscapita.com>"
+ENV JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm"
 
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
