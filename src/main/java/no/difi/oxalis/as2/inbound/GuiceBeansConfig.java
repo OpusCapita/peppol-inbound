@@ -7,9 +7,11 @@ import com.opuscapita.peppol.inbound.rest.InboundHomeServlet;
 import com.opuscapita.peppol.inbound.rest.InboundStatusServlet;
 import com.opuscapita.peppol.inbound.rest.StatisticsServlet;
 import no.difi.oxalis.commons.guice.GuiceModuleLoader;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 import javax.servlet.http.HttpServlet;
@@ -47,6 +49,10 @@ public class GuiceBeansConfig {
     public ServletRegistrationBean<HttpServlet> businessServletBean() {
         ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
                 injector.getInstance(InboundBusinessServlet.class), "/a2a", "/xib", "/reprocess");
+        MultipartConfigFactory configFactory = new MultipartConfigFactory();
+        configFactory.setMaxFileSize(DataSize.ofMegabytes(150));
+        configFactory.setMaxRequestSize(DataSize.ofMegabytes(150));
+        bean.setMultipartConfig(configFactory.createMultipartConfig());
         bean.setLoadOnStartup(1);
         return bean;
     }
