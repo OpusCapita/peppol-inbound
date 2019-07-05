@@ -31,8 +31,6 @@ public class InboundBusinessServlet extends HttpServlet {
 
     @Override
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-        response.getWriter().println("Request arrived...");
-
         try {
             businessHandlerProvider.get().receive(request);
 
