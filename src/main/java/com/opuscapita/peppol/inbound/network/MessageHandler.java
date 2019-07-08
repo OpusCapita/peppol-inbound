@@ -9,6 +9,7 @@ import com.opuscapita.peppol.commons.eventing.TicketReporter;
 import com.opuscapita.peppol.commons.storage.Storage;
 import com.opuscapita.peppol.commons.storage.StorageUtils;
 import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,12 @@ public class MessageHandler {
             metadata = new ContainerMessageMetadata();
             metadata.setTransmissionId(UUID.randomUUID().toString());
             metadata.setMessageId(UUID.randomUUID().toString());
+        }
+
+        // PD-152: persist access point info through reprocessing
+        String accessPointId = wrapper.getHeader("Access-Point");
+        if (StringUtils.isNotBlank(accessPointId)) {
+            metadata.setSendingAccessPoint(accessPointId);
         }
 
         metadata.setBusinessMetadata(metadataExtractor.extractBusinessMetadata(wrapper.getInputStream()));
