@@ -36,6 +36,9 @@ public class BusinessInboundHandler {
         if (uri.contains("xib")) {
             return Source.XIB;
         }
+        if (uri.contains("sirius")) {
+            return Source.SIRIUS;
+        }
         return Source.UNKNOWN;
     }
 

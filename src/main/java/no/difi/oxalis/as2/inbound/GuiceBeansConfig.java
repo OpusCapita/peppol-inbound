@@ -48,7 +48,7 @@ public class GuiceBeansConfig {
     @Bean
     public ServletRegistrationBean<HttpServlet> businessServletBean() {
         ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
-                injector.getInstance(InboundBusinessServlet.class), "/a2a", "/xib", "/reprocess");
+                injector.getInstance(InboundBusinessServlet.class), "/a2a", "/xib", "/sirius", "/reprocess");
         MultipartConfigFactory configFactory = new MultipartConfigFactory();
         configFactory.setMaxFileSize(DataSize.ofMegabytes(150));
         configFactory.setMaxRequestSize(DataSize.ofMegabytes(150));
