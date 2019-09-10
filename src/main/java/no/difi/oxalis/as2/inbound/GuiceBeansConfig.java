@@ -6,6 +6,7 @@ import com.opuscapita.peppol.inbound.rest.InboundBusinessServlet;
 import com.opuscapita.peppol.inbound.rest.InboundHomeServlet;
 import com.opuscapita.peppol.inbound.rest.InboundStatusServlet;
 import com.opuscapita.peppol.inbound.rest.StatisticsServlet;
+import no.difi.oxalis.as4.inbound.As4Servlet;
 import no.difi.oxalis.commons.guice.GuiceModuleLoader;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -61,6 +62,14 @@ public class GuiceBeansConfig {
     public ServletRegistrationBean<HttpServlet> as2ServletBean() {
         ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
                 injector.getInstance(As2Servlet.class), "/public/as2");
+        bean.setLoadOnStartup(1);
+        return bean;
+    }
+
+    @Bean
+    public ServletRegistrationBean<HttpServlet> as4ServletBean() {
+        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
+                injector.getInstance(As4Servlet.class), "/public/as4");
         bean.setLoadOnStartup(1);
         return bean;
     }

@@ -5,6 +5,10 @@ plugins {
 apply plugin: 'java'
 apply plugin: "io.spring.dependency-management"
 
+configurations {
+    zipped
+}
+
 jar {
     baseName = 'peppol-inbound'
     version = ''
@@ -20,6 +24,10 @@ repositories {
 }
 
 dependencies {
+    zipped files('libs/oxalis-as4.zip')
+    compile files({ tasks.installDependencies.extractedJars })
+
+    compile 'com.google.inject.extensions:guice-servlet:4.2.2'
     compile 'com.google.guava:guava:24.0-jre'
     compile 'com.opuscapita.peppol:peppol-commons:1.0.15'
 
@@ -35,4 +43,19 @@ dependencyManagement {
     imports {
         mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Greenwich.RELEASE'
     }
+}
+
+task installDependencies(type: Sync) {
+    def extractDir = "${buildDir}/libs"
+
+    ext.extractedJars = fileTree(extractDir) {
+        include "**/*.jar"
+        builtBy "installDependencies"
+    }
+
+    dependsOn configurations.zipped
+    from {
+        configurations.zipped.collect { zipTree(it) }
+    }
+    into extractDir
 }
