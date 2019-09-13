@@ -9,8 +9,6 @@ COPY build.gradle settings.gradle gradlew $APP_HOME
 COPY gradle $APP_HOME/gradle
 COPY . $APP_HOME
 
-RUN unzip -q $APP_HOME/libs/oxalis-as4.zip
-
 RUN chmod +x ./gradlew
 RUN ./gradlew build || return 0
 

@@ -8,11 +8,11 @@ import no.difi.oxalis.api.persist.PayloadPersister;
 import no.difi.oxalis.api.persist.PersisterHandler;
 import no.difi.oxalis.api.persist.ReceiptPersister;
 import no.difi.oxalis.as2.inbound.OcInboundService;
-import no.difi.oxalis.as4.config.TrustStore;
-import no.difi.oxalis.as4.inbound.*;
 import no.difi.oxalis.commons.guice.OxalisModule;
-import no.difi.oxalis.commons.settings.SettingsBuilder;
-import org.apache.cxf.wsdl.interceptors.AbstractEndpointSelectionInterceptor;
+//import no.difi.oxalis.as4.config.TrustStore;
+//import no.difi.oxalis.as4.inbound.*;
+//import no.difi.oxalis.commons.settings.SettingsBuilder;
+//import org.apache.cxf.wsdl.interceptors.AbstractEndpointSelectionInterceptor;
 
 public class InboundModule extends OxalisModule implements Module {
 
@@ -25,11 +25,11 @@ public class InboundModule extends OxalisModule implements Module {
 
         bind(InboundService.class).to(OcInboundService.class);
 
-        bind(AbstractEndpointSelectionInterceptor.class).to(As4EndpointSelector.class);
-        bind(As4Provider.class);
-        bind(As4EndpointsPublisher.class).to(As4EndpointsPublisherImpl.class);
-        bind(As4InboundHandler.class);
-        SettingsBuilder.with(this.binder(), TrustStore.class);
+//        bind(AbstractEndpointSelectionInterceptor.class).to(As4EndpointSelector.class);
+//        bind(As4Provider.class);
+//        bind(As4EndpointsPublisher.class).to(As4EndpointsPublisherImpl.class);
+//        bind(As4InboundHandler.class);
+//        SettingsBuilder.with(this.binder(), TrustStore.class);
     }
 
 }
