@@ -44,7 +44,9 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
     public Path persist(TransmissionIdentifier transmissionIdentifier, Header header, InputStream inputStream) throws IOException {
         String filename = header.getIdentifier().getIdentifier() + ".xml";
         logger.info("Received a message from NETWORK, storing content as: " + filename);
-        return Paths.get(messageHandler.store(filename, Source.NETWORK, inputStream));
+        Path path = Paths.get(messageHandler.store(filename, Source.NETWORK, inputStream));
+        logger.debug("First InboundHandler.persist executed for file: " + filename + ", returning: " + path);
+        return path;
     }
 
     // file coming from network: oxalis receipt persister
@@ -52,7 +54,9 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
     public void persist(InboundMetadata inboundMetadata, Path payloadPath) {
         Source source = Source.NETWORK;
         String filename = payloadPath.toString();
+        logger.debug("Second InboundHandler.persist invoked for file: " + filename);
         ContainerMessageMetadata metadata = ContainerMessageMetadata.create(inboundMetadata);
+        logger.debug("ContainerMessageMetadata successfully created for file: " + filename);
 
         logReceipt(metadata, source, filename);
         messageHandler.process(metadata, source, filename);
