@@ -48,7 +48,7 @@ public class GuiceBeansConfig {
     @Bean
     public ServletRegistrationBean<HttpServlet> businessServletBean() {
         ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
-                injector.getInstance(InboundBusinessServlet.class), "/a2a", "/xib", "/reprocess");
+                injector.getInstance(InboundBusinessServlet.class), "/a2a", "/xib", "/sirius", "/reprocess");
         MultipartConfigFactory configFactory = new MultipartConfigFactory();
         configFactory.setMaxFileSize(DataSize.ofMegabytes(150));
         configFactory.setMaxRequestSize(DataSize.ofMegabytes(150));
@@ -64,6 +64,14 @@ public class GuiceBeansConfig {
         bean.setLoadOnStartup(1);
         return bean;
     }
+
+//    @Bean
+//    public ServletRegistrationBean<HttpServlet> as4ServletBean() {
+//        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
+//                injector.getInstance(As4Servlet.class), "/public/as4");
+//        bean.setLoadOnStartup(1);
+//        return bean;
+//    }
 
     @Bean
     public CommonsRequestLoggingFilter logFilter() {
