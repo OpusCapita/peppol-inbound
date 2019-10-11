@@ -21,11 +21,11 @@ repositories {
 
 dependencies {
     compile 'com.google.guava:guava:24.0-jre'
-    compile 'com.opuscapita.peppol:peppol-commons:1.0.16'
+    compile 'com.opuscapita.peppol:peppol-commons:1.0.15'
 
-    compile group: 'no.difi.oxalis', name: 'oxalis-as2', version: '4.1.0'
-    compile group: 'no.difi.oxalis', name: 'oxalis-api', version: '4.1.0'
-    compile group: 'no.difi.oxalis', name: 'oxalis-statistics', version: '4.1.0'
+    compile group: 'no.difi.oxalis', name: 'oxalis-as2', version: '4.0.2'
+    compile group: 'no.difi.oxalis', name: 'oxalis-api', version: '4.0.2'
+    compile group: 'no.difi.oxalis', name: 'oxalis-statistics', version: '4.0.2'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.0.RELEASE'
