@@ -53,19 +53,23 @@ public class MessageHandler {
     // this is the only method that allowed to throw an exception which will be propagated to the sending party
     String store(String filename, Source source, InputStream inputStream) throws IOException {
 
-        logger.info(IOUtils.toString(inputStream));
+        String result = null;
 
         try {
             logger.debug("MesssageHandler.store invoked for filename: " + filename);
             String path = hotFolder + StorageUtils.FILE_SEPARATOR + source.name().toLowerCase();
             path = StorageUtils.createDailyPath(path, "");
-            String result = storage.put(inputStream, path, filename);
-            logger.debug("MessageHandler.store executed, returning: " + result);
-            return result;
+            result = storage.put(inputStream, path, filename);
         } catch (Exception e) {
             fail("Failed to store message " + filename, filename, e);
             throw new IOException("Failed to store message " + filename + ", reason: " + e.getMessage(), e);
         }
+
+        try (InputStream content = storage.get(result)) {
+            logger.info(IOUtils.toString(content));
+        }
+
+        return result;
     }
 
     ContainerMessageMetadata extractMetadata(ServletRequestWrapper wrapper) throws IOException {

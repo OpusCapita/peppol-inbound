@@ -44,9 +44,7 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
     public Path persist(TransmissionIdentifier transmissionIdentifier, Header header, InputStream inputStream) throws IOException {
         String filename = header.getIdentifier().getIdentifier() + ".xml";
         logger.info("Received a message from NETWORK, storing content as: " + filename);
-        Path path = Paths.get(messageHandler.store(filename, Source.NETWORK, inputStream));
-        logger.debug("First InboundHandler.persist executed for file: " + filename + ", returning: " + path);
-        return path;
+        return Paths.get(messageHandler.store(filename, Source.NETWORK, inputStream));
     }
 
     // file coming from network: oxalis receipt persister
