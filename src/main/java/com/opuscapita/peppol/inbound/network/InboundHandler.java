@@ -38,6 +38,11 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
         messageHandler = InboundApp.getMessageHandler();
         logger.info("OpusCapita inbound receiver initialized");
     }
+    
+    @Override
+    public void persist(TransmissionIdentifier transmissionIdentifier, Header header, Path payloadPath, Exception exception) {
+        logger.error("ERROR Occurred for transmissionId: " + transmissionIdentifier + ", header: " + header.toString() + ", path: " + payloadPath, exception);
+    }
 
     // file coming from network: oxalis payload persister
     @Override
