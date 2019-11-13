@@ -9,6 +9,7 @@ import com.opuscapita.peppol.commons.eventing.TicketReporter;
 import com.opuscapita.peppol.commons.storage.Storage;
 import com.opuscapita.peppol.commons.storage.StorageUtils;
 import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,9 @@ public class MessageHandler {
 
     // this is the only method that allowed to throw an exception which will be propagated to the sending party
     String store(String filename, Source source, InputStream inputStream) throws IOException {
+
+        logger.info(IOUtils.toString(inputStream));
+
         try {
             logger.debug("MesssageHandler.store invoked for filename: " + filename);
             String path = hotFolder + StorageUtils.FILE_SEPARATOR + source.name().toLowerCase();
