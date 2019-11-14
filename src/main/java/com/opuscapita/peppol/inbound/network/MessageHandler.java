@@ -55,9 +55,7 @@ public class MessageHandler {
             logger.debug("MesssageHandler.store invoked for filename: " + filename);
             String path = hotFolder + StorageUtils.FILE_SEPARATOR + source.name().toLowerCase();
             path = StorageUtils.createDailyPath(path, "");
-            String result = storage.put(inputStream, path, filename);
-            logger.debug("MessageHandler.store executed, returning: " + result);
-            return result;
+            return storage.put(inputStream, path, filename);
         } catch (Exception e) {
             fail("Failed to store message " + filename, filename, e);
             throw new IOException("Failed to store message " + filename + ", reason: " + e.getMessage(), e);
