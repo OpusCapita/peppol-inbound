@@ -23,10 +23,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -103,12 +100,8 @@ public class MessageHandler {
             HttpHeaders headers = new HttpHeaders();
             authService.setAuthorizationHeader(headers);
             headers.set("Transfer-Encoding", "chunked");
-            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-            body.add("file", new InputStreamResource(content));
-
-            HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            HttpEntity<Resource> entity = new HttpEntity<>(new InputStreamResource(content), headers);
             logger.debug("Wrapped and set the request body as input stream");
 
             ResponseEntity<BlobServiceResponse> result = restTemplate.exchange(endpoint, HttpMethod.PUT, entity, BlobServiceResponse.class);
