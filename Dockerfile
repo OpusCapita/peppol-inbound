@@ -11,8 +11,10 @@ COPY . $APP_HOME
 
 RUN unzip -q $APP_HOME/libs/oxalis-as4.zip
 
+RUN ls -l $APP_HOME/libs
+
 RUN chmod +x ./gradlew
-RUN ./gradlew build || return 0
+RUN ./gradlew -q build || return 0
 
 ## actual container
 FROM openjdk:8
