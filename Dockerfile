@@ -5,13 +5,9 @@ FROM openjdk:8 AS TEMP_BUILD_IMAGE
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
-COPY build.gradle settings.gradle gradlew $APP_HOME
-COPY gradle $APP_HOME/gradle
+ADD libs/oxalis-as4.tar.gz $APP_HOME/libs
 COPY . $APP_HOME
-
-RUN unzip -q $APP_HOME/libs/oxalis-as4.zip
-
-RUN ls -l $APP_HOME/libs
+RUN rm $APP_HOME/libs/oxalis-as4.tar.gz
 
 RUN chmod +x ./gradlew
 RUN ./gradlew -q build || return 0
@@ -26,7 +22,6 @@ ENV JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
-COPY --from=TEMP_BUILD_IMAGE $APP_HOME/oxalis oxalis
 COPY --from=TEMP_BUILD_IMAGE $APP_HOME/build/libs/peppol-inbound.jar .
 
 HEALTHCHECK --interval=15s --timeout=30s --start-period=40s --retries=15 \
