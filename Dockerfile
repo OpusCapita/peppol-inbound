@@ -22,6 +22,7 @@ ENV JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
+COPY --from=TEMP_BUILD_IMAGE $APP_HOME/oxalis oxalis
 COPY --from=TEMP_BUILD_IMAGE $APP_HOME/build/libs/peppol-inbound.jar .
 
 HEALTHCHECK --interval=15s --timeout=30s --start-period=40s --retries=15 \
