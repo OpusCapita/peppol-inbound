@@ -2,7 +2,7 @@ package com.opuscapita.peppol.inbound.network;
 
 import com.opuscapita.peppol.commons.container.metadata.ContainerMessageMetadata;
 import com.opuscapita.peppol.commons.container.state.Source;
-import com.opuscapita.peppol.inbound.InboundApp;
+import com.opuscapita.peppol.inbound.InboundModule;
 import com.opuscapita.peppol.inbound.business.BusinessInboundPersister;
 import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
 import no.difi.oxalis.api.inbound.InboundMetadata;
@@ -35,7 +35,7 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
 
     // this is done to separate Spring dependency injection from Guice one (we're in Guice now, while messageHandler is in Spring)
     public InboundHandler() {
-        messageHandler = InboundApp.getMessageHandler();
+        this.messageHandler = InboundModule.getMessageHandler();
         logger.info("OpusCapita inbound receiver initialized");
     }
 
