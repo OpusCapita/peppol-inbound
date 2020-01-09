@@ -3,6 +3,7 @@ package com.opuscapita.peppol.inbound;
 import com.google.inject.Module;
 import com.opuscapita.peppol.inbound.business.BusinessInboundPersister;
 import com.opuscapita.peppol.inbound.network.InboundHandler;
+import com.opuscapita.peppol.inbound.network.MessageHandler;
 import no.difi.oxalis.api.inbound.InboundService;
 import no.difi.oxalis.api.persist.PayloadPersister;
 import no.difi.oxalis.api.persist.PersisterHandler;
@@ -15,6 +16,12 @@ import no.difi.oxalis.commons.settings.SettingsBuilder;
 import org.apache.cxf.wsdl.interceptors.AbstractEndpointSelectionInterceptor;
 
 public class InboundModule extends OxalisModule implements Module {
+
+    private static MessageHandler messageHandler;
+
+    public InboundModule(MessageHandler springInjectedMessageHandler) {
+        InboundModule.messageHandler = springInjectedMessageHandler;
+    }
 
     @Override
     protected void configure() {
@@ -30,5 +37,9 @@ public class InboundModule extends OxalisModule implements Module {
         bind(As4EndpointsPublisher.class).to(As4EndpointsPublisherImpl.class);
         bind(As4InboundHandler.class);
         SettingsBuilder.with(this.binder(), TrustStore.class);
+    }
+
+    public static MessageHandler getMessageHandler() {
+        return InboundModule.messageHandler;
     }
 }

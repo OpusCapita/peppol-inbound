@@ -1,11 +1,8 @@
 package com.opuscapita.peppol.inbound;
 
-import com.opuscapita.peppol.inbound.network.MessageHandler;
 import com.opuscapita.peppol.inbound.util.FileUpdateUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,13 +19,6 @@ import java.io.InputStream;
 @ComponentScan({"com.opuscapita.peppol.inbound", "com.opuscapita.peppol.commons", "no.difi.oxalis.as2.inbound"})
 public class InboundApp {
 
-    private static MessageHandler messageHandler;
-
-    @Autowired
-    public InboundApp(@NotNull MessageHandler commonMessageHandler) {
-        messageHandler = commonMessageHandler;
-    }
-
     public static void main(String[] args) {
         try {
             prepareOxalisHomeDirectory();
@@ -37,17 +27,6 @@ public class InboundApp {
         }
 
         SpringApplication.run(InboundApp.class, args);
-    }
-
-    /**
-     * A bit tricky thing, Oxalis uses Guice dependency injection while our code uses Spring.
-     * This is the way how to inform Oxalis on what class to use.
-     *
-     * @return message handler bean managed by Spring
-     */
-    @NotNull
-    public static MessageHandler getMessageHandler() {
-        return messageHandler;
     }
 
     /**
