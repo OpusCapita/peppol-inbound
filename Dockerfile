@@ -5,12 +5,12 @@ FROM openjdk:8 AS TEMP_BUILD_IMAGE
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
-COPY build.gradle settings.gradle gradlew $APP_HOME
-COPY gradle $APP_HOME/gradle
+ADD libs/oxalis-as4.tar.gz $APP_HOME/libs
 COPY . $APP_HOME
+RUN rm $APP_HOME/libs/oxalis-as4.tar.gz
 
 RUN chmod +x ./gradlew
-RUN ./gradlew build || return 0
+RUN ./gradlew -q build || return 0
 
 ## actual container
 FROM openjdk:8

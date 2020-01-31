@@ -2,11 +2,14 @@ package no.difi.oxalis.as2.inbound;
 
 import com.google.inject.Injector;
 import com.opuscapita.peppol.inbound.InboundModule;
+import com.opuscapita.peppol.inbound.network.MessageHandler;
 import com.opuscapita.peppol.inbound.rest.InboundBusinessServlet;
 import com.opuscapita.peppol.inbound.rest.InboundHomeServlet;
 import com.opuscapita.peppol.inbound.rest.InboundStatusServlet;
 import com.opuscapita.peppol.inbound.rest.StatisticsServlet;
+import no.difi.oxalis.as4.inbound.As4Servlet;
 import no.difi.oxalis.commons.guice.GuiceModuleLoader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -19,12 +22,17 @@ import javax.servlet.http.HttpServlet;
 @Configuration
 public class GuiceBeansConfig {
 
-    // Oxalis needs some guice, give it to Oxalis
-    private final Injector injector = GuiceModuleLoader.initiate(new InboundModule());
+    private final Injector injector;
+
+    @Autowired
+    public GuiceBeansConfig(MessageHandler messageHandler) {
+        this.injector = GuiceModuleLoader.initiate(new InboundModule(messageHandler));
+    }
 
     @Bean
     public ServletRegistrationBean<HttpServlet> homeServletBean() {
-        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(new InboundHomeServlet(), "/", "/api/health/check");
+        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
+                new InboundHomeServlet(), "/", "/api/health/check");
         bean.setLoadOnStartup(1);
         return bean;
     }
@@ -65,13 +73,13 @@ public class GuiceBeansConfig {
         return bean;
     }
 
-//    @Bean
-//    public ServletRegistrationBean<HttpServlet> as4ServletBean() {
-//        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
-//                injector.getInstance(As4Servlet.class), "/public/as4");
-//        bean.setLoadOnStartup(1);
-//        return bean;
-//    }
+    @Bean
+    public ServletRegistrationBean<HttpServlet> as4ServletBean() {
+        ServletRegistrationBean<HttpServlet> bean = new ServletRegistrationBean<>(
+                injector.getInstance(As4Servlet.class), "/public/as4");
+        bean.setLoadOnStartup(1);
+        return bean;
+    }
 
     @Bean
     public CommonsRequestLoggingFilter logFilter() {
