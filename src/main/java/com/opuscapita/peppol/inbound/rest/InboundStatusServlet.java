@@ -2,6 +2,7 @@ package com.opuscapita.peppol.inbound.rest;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import no.difi.oxalis.as4.inbound.OxalisAS4Version;
 import no.difi.oxalis.commons.util.OxalisVersion;
 import no.difi.vefa.peppol.mode.Mode;
 
@@ -31,6 +32,7 @@ public class InboundStatusServlet extends HttpServlet {
 
         PrintWriter writer = resp.getWriter();
         writer.println("version.oxalis: " + OxalisVersion.getVersion());
+        writer.println("version.oxalis-as4: " + OxalisAS4Version.getVersion());
         writer.println("version.java: " + System.getProperty("java.version"));
         writer.println("mode: " + mode.getIdentifier());
 
