@@ -39,6 +39,6 @@
   },
   "prod": {
     "replicas": 3,
-    "limit-memory": "2000M"
+    "limit-memory": "2200M"
   }
 }
