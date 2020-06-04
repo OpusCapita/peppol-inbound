@@ -1,6 +1,5 @@
 package com.opuscapita.peppol.inbound;
 
-import com.opuscapita.peppol.inbound.util.FileUpdateUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
@@ -9,10 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import javax.xml.bind.DatatypeConverter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 @EnableAutoConfiguration
 @SpringBootApplication
@@ -21,7 +18,7 @@ public class InboundApp {
 
     public static void main(String[] args) {
         try {
-            prepareOxalisHomeDirectory();
+            prepareKeystore();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -29,31 +26,12 @@ public class InboundApp {
         SpringApplication.run(InboundApp.class, args);
     }
 
-    /**
-     * A bit tricky thing, Local build and testing uses docker compose
-     * This is the workaround to inject keys since compose secrets failed.
-     */
-    private static void prepareOxalisHomeDirectory() throws IOException {
-        String oxalisHome = System.getenv("OXALIS_HOME");
-        if (StringUtils.isBlank(oxalisHome)) {
-            return;
-        }
-
-        String conf = System.getenv("OXALIS_CONF");
-        String cert = System.getenv("OXALIS_CERT");
-
-        if (StringUtils.isNotBlank(conf)) {
-            String key = "oxalis.database.jdbc.password";
-
-            File file = new File(oxalisHome + "/oxalis.conf");
-            InputStream content = new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(conf));
-            InputStream updated = FileUpdateUtils.startAndReplace(content, key, key + "=test");
-            FileUtils.copyInputStreamToFile(updated, file);
-        }
+    // This is the workaround to inject key for compose since we use docker secrets
+    private static void prepareKeystore() throws IOException {
+        String cert = System.getenv("PEPPOL_KEYSTORE");
         if (StringUtils.isNotBlank(cert)) {
-            File file = new File(oxalisHome + "/oxalis-keystore.jks");
+            File file = new File("/run/secrets/oxalis-keystore.jks");
             FileUtils.writeByteArrayToFile(file, DatatypeConverter.parseBase64Binary(cert));
         }
     }
-
 }
