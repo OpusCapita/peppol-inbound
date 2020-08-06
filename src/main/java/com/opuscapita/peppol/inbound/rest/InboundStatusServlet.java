@@ -40,7 +40,7 @@ public class InboundStatusServlet extends HttpServlet {
         writer.println("certificate.subject: " + certificate.getSubjectX500Principal().getName());
         writer.println("certificate.issuer: " + certificate.getIssuerX500Principal().getName());
         writer.println("certificate.expired: " + certificate.getNotAfter().before(new Date()));
-        writer.println("certificate.expiryDate: " + new SimpleDateFormat("dd-mm-yyyy").format(certificate.getNotAfter()));
+        writer.println("certificate.expiryDate: " + new SimpleDateFormat("dd-MMM-yyyy").format(certificate.getNotAfter()));
         writer.println("build.id: " + OxalisVersion.getBuildId());
         writer.println("build.tstamp: " + OxalisVersion.getBuildTimeStamp());
     }
