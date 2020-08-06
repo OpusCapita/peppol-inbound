@@ -32,7 +32,7 @@
       "snc/businessGroup": "Itella Information"
     },
     "oc-secret-injection": {
-      "oxalis-keystore-06082020r2.jks": {"type": "binary", "encoding": "base64", "value": "${PEPPOL_:env_KEYSTORE}"}
+      "oxalis-keystore-07082020.jks.jks": {"type": "binary", "encoding": "base64", "value": "${PEPPOL_:env_KEYSTORE}"}
     },
     "limit-memory": "900M",
     "reserve-memory": "500M",

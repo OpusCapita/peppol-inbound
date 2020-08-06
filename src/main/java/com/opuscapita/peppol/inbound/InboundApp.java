@@ -30,7 +30,7 @@ public class InboundApp {
     private static void prepareKeystore() throws IOException {
         String cert = System.getenv("PEPPOL_KEYSTORE");
         if (StringUtils.isNotBlank(cert)) {
-            File file = new File("/run/secrets/oxalis-keystore-06082020r2.jks");
+            File file = new File("/run/secrets/oxalis-keystore-07082020.jks.jks");
             FileUtils.writeByteArrayToFile(file, DatatypeConverter.parseBase64Binary(cert));
         }
     }
