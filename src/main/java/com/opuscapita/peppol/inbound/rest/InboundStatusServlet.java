@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Singleton
@@ -39,6 +40,7 @@ public class InboundStatusServlet extends HttpServlet {
         writer.println("certificate.subject: " + certificate.getSubjectX500Principal().getName());
         writer.println("certificate.issuer: " + certificate.getIssuerX500Principal().getName());
         writer.println("certificate.expired: " + certificate.getNotAfter().before(new Date()));
+        writer.println("certificate.expiryDate: " + new SimpleDateFormat("dd-mm-yyyy").format(certificate.getNotAfter()));
         writer.println("build.id: " + OxalisVersion.getBuildId());
         writer.println("build.tstamp: " + OxalisVersion.getBuildTimeStamp());
     }
