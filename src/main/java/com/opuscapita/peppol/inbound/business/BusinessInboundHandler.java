@@ -39,7 +39,7 @@ public class BusinessInboundHandler {
         else if (uri.contains("sirius")) {
             return Source.SIRIUS;
         }
-        else if (uri.contains("gwhttpbasic")) {
+        else if (uri.contains("gw")) {
             return Source.GW_HTTPBASIC;
         }
 

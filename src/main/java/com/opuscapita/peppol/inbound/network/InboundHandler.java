@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * Receives message from Oxalis and gives it to us.
@@ -63,7 +65,14 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
     // file coming from business platform: source, both payload and receipt persistence
     @Override
     public void persist(String filename, Source source, ServletRequestWrapper wrapper) throws IOException {
-        ContainerMessageMetadata metadata = messageHandler.extractMetadata(wrapper);
+        ContainerMessageMetadata metadata
+
+        if( source != Source.GW_HTTPBASIC ) {
+          ContainerMessageMetadata metadata = messageHandler.extractMetadata(wrapper);
+        }
+        else {
+          ContainerMessageMetadata metadata = this.extractGWMetadataFromHeaderParams(wrapper);
+        }
         filename = StringUtils.isBlank(filename) ? metadata.getMessageId() + ".xml" : filename;
 
         logger.info("Received a message from " + source.name() + ", storing content as: " + filename);
@@ -71,6 +80,32 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
 
         logReceipt(metadata, source, dataFile);
         messageHandler.process(metadata, source, dataFile);
+    }
+
+
+    ContainerMessageMetadata extractGWMetadataFromHeaderParams( ServletRequestWrapper wrapper ) { //TODO move to common??
+        ContainerMessageMetadata md = new ContainerMessageMetadata();
+
+        md.setRecipientId(  "0000:000000000" );
+        md.setSenderId(     "0000:000000000" );
+        md.setDocumentTypeIdentifier( "cust:opuscapita:unidentified-document" );
+        md.setProfileTypeIdentifier(  "cust:opuscapita:unidentified-process" );
+
+        md.setMessageId( wrapper.getHeader("transactionId") );
+        md.setDocumentTypeIdentifier(     "0000:000000000" );
+        md.setProfileTypeIdentifier(     "0000:000000000" );
+
+        md.setProtocol( wrapper.getHeader("protocol") );
+        md.setUserAgent( wrapper.getHeader("userAgent") );
+        md.setUserAgentVersion( wrapper.getHeader("userAgentVersion") );
+
+        md.setSendingAccessPoint( "GW:" + wrapper.getHeader("gwAlias") + ":" + wrapper.getHeader("gwAccount") );
+
+        md.setTimestamp(
+          new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss").parse( wrapper.getHeader("gwReceiveTimestamp") )
+        );
+
+       return md;
     }
 
     private void logReceipt(ContainerMessageMetadata metadata, Source source, String filename) {
