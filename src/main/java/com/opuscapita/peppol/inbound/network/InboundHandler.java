@@ -101,9 +101,14 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
 
         md.setSendingAccessPoint( "GW:" + wrapper.getHeader("gwAlias") + ":" + wrapper.getHeader("gwAccount") );
 
-        md.setTimestamp(
-          new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss").parse( wrapper.getHeader("gwReceiveTimestamp") )
-        );
+        try {
+          md.setTimestamp(
+            new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss").parse( wrapper.getHeader("gwReceiveTimestamp") )
+            );
+          }
+        catch(Exception e) {
+          md.setTimestamp( new Date() );
+        }
 
        return md;
     }
