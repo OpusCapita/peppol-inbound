@@ -68,10 +68,10 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
         ContainerMessageMetadata metadata;
 
         if( source != Source.GW_HTTPBASIC ) {
-          ContainerMessageMetadata metadata = messageHandler.extractMetadata(wrapper);
+          metadata = messageHandler.extractMetadata(wrapper);
         }
         else {
-          ContainerMessageMetadata metadata = this.extractGWMetadataFromHeaderParams(wrapper);
+          metadata = this.extractGWMetadataFromHeaderParams(wrapper);
         }
         filename = StringUtils.isBlank(filename) ? metadata.getMessageId() + ".xml" : filename;
 
