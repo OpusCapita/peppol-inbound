@@ -65,7 +65,7 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
     // file coming from business platform: source, both payload and receipt persistence
     @Override
     public void persist(String filename, Source source, ServletRequestWrapper wrapper) throws IOException {
-        ContainerMessageMetadata metadata
+        ContainerMessageMetadata metadata;
 
         if( source != Source.GW_HTTPBASIC ) {
           ContainerMessageMetadata metadata = messageHandler.extractMetadata(wrapper);
