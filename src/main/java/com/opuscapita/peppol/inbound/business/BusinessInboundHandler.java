@@ -33,12 +33,16 @@ public class BusinessInboundHandler {
         if (uri.contains("a2a")) {
             return Source.A2A;
         }
-        if (uri.contains("xib")) {
+        else if (uri.contains("xib")) {
             return Source.XIB;
         }
-        if (uri.contains("sirius")) {
+        else if (uri.contains("sirius")) {
             return Source.SIRIUS;
         }
+        else if (uri.contains("gwhttpbasic")) {
+            return Source.GW_HTTPBASIC;
+        }
+
         return Source.UNKNOWN;
     }
 
