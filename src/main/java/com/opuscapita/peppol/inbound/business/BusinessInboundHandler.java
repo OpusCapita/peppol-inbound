@@ -6,10 +6,15 @@ import com.opuscapita.peppol.commons.container.state.Source;
 import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BusinessInboundHandler {
 
     private final BusinessInboundPersister persisterHandler;
+    private final static Logger logger = LoggerFactory.getLogger(BusinessInboundHandler.class);
 
     @Inject
     public BusinessInboundHandler(@Named("opuscapita") BusinessInboundPersister persisterHandler) {
@@ -21,6 +26,17 @@ public class BusinessInboundHandler {
 
 
         logger.info("TODO: BussinessInboundHandler.receive entered");
+
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames != null && headerNames.hasMoreElements()) {
+            String key = headerNames.nextElement();
+            String value = request.getHeader(key);
+
+            logger.info("TODO: hdr: " + key + " -> ''" + value + "'");
+
+        }
+
+
         Source source = getSource(request);
         String filename = request.getParameter("filename");
 
