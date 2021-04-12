@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 public class BusinessInboundHandler {
 
     private final BusinessInboundPersister persisterHandler;
+    private final static Logger logger = LoggerFactory.getLogger(BusinessInboundHandler.class);
 
     @Inject
     public BusinessInboundHandler(@Named("opuscapita") BusinessInboundPersister persisterHandler) {

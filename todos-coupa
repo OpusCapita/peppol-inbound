@@ -25,6 +25,7 @@
    @Since(1.0) private String profileTypeIdentifier;
 }
 
+
    @Since(1.0) private String instanceType;
    @Since(1.0) private String instanceTypeVersion;
    @Since(1.0) private String instanceTypeStandard;
@@ -37,3 +38,17 @@
 
    @Since(1.0) private ContainerValidationRule validationRule;
    @Since(1.1) private ContainerBusinessMetadata businessMetadata;
+
+
+   @Since(1.0) private String gwaccount;      <--- Must add to the record ?? (maybe virtual)
+
+
+
+
+
+   @Since(1.0) private String protocol;                  <- Client param, just pass through
+   @Since(1.0) private String userAgent;                 <- Client user agent
+   @Since(1.0) private String userAgentVersion;          <- ""
+   @Since(1.0) private String gwAlias;      <--- "PUBLIC_HTTP_BASIC"
+   @Since(1.0) private String gwAccount;      <--- Must add to the record ?? (maybe virtual)
+   @Since(1.0) private Date   gwReceiveTimestamp; <--- WHICH Format???   2021-01-14T15:28:56.000+0000
