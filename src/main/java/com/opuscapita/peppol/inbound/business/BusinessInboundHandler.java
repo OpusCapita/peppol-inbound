@@ -30,7 +30,7 @@ public class BusinessInboundHandler {
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames != null && headerNames.hasMoreElements()) {
             String key = headerNames.nextElement();
-            String Value = request.getHeader(key);
+            String value = request.getHeader(key);
 
             logger.info("TODO: hdr: " + key + " -> ''" + value + "'");
 
