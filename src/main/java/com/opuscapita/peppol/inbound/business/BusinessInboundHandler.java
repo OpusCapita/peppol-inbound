@@ -7,6 +7,10 @@ import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class BusinessInboundHandler {
 
     private final BusinessInboundPersister persisterHandler;
