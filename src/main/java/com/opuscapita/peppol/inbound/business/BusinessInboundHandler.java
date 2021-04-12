@@ -19,8 +19,12 @@ public class BusinessInboundHandler {
     public void receive(final HttpServletRequest request) throws Exception {
         ServletRequestWrapper wrapper = new ServletRequestWrapper(request);
 
+
+        logger.info("TODO: BussinessInboundHandler.receive entered");
         Source source = getSource(request);
         String filename = request.getParameter("filename");
+
+        logger.info("TODO filename = " + filename +" source=" + source );
 
         persisterHandler.persist(filename, source, wrapper);
     }
@@ -40,6 +44,7 @@ public class BusinessInboundHandler {
             return Source.SIRIUS;
         }
         else if (uri.contains("gw")) {
+
             return Source.GW_HTTPBASIC;
         }
 
