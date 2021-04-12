@@ -26,6 +26,17 @@ public class BusinessInboundHandler {
 
 
         logger.info("TODO: BussinessInboundHandler.receive entered");
+
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames != null && headerNames.hasMoreElements()) {
+            String key = headerNames.nextElement();
+            String Value = request.getHeader(key);
+
+            logger.info("TODO: hdr: " + key + " -> ''" + value + "'");
+
+        }
+
+
         Source source = getSource(request);
         String filename = request.getParameter("filename");
 
