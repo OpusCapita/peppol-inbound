@@ -6,7 +6,7 @@ import com.opuscapita.peppol.commons.container.state.Source;
 import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
 
 import javax.servlet.http.HttpServletRequest;
-
+import java.util.Enumeration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
