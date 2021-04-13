@@ -69,14 +69,14 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
 
         logger.info("TODO entering persist = " + filename +" source=" + source, " wrapper=" + wrapper );
 
-        if( source != Source.GW_HTTPBASIC ) {
-          logger.info("TODO: source != Source.GW_HTTPBASIC" );
+        if( source != Source.GW ) {
+          logger.info("TODO: source != Source.GW" );
           metadata = messageHandler.extractMetadata(wrapper);
         }
         else {
-          logger.info("TODO: source == Source.GW_HTTPBASIC" );
+          logger.info("TODO: source == Source.GW" );
           metadata = this.extractGWMetadataFromHeaderParams(wrapper);
-          logger.info("TODO: source == Source.GW_HTTPBASIC - after" );
+          logger.info("TODO: source == Source.GW - after" );
         }
         filename = StringUtils.isBlank(filename) ? metadata.getMessageId() + ".xml" : filename;
 logger.info("TODO: 30" );
