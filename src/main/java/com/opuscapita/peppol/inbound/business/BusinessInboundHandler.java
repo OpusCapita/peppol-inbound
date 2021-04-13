@@ -47,6 +47,8 @@ public class BusinessInboundHandler {
 
     private Source getSource(HttpServletRequest request) {
         String uri = request.getRequestURI();
+        logger.info("TODO uri = " + uri  );
+
         if (uri.contains("reprocess")) {
             return Source.valueOf(request.getHeader("Peppol-Source"));
         }
@@ -60,7 +62,6 @@ public class BusinessInboundHandler {
             return Source.SIRIUS;
         }
         else if (uri.contains("gw")) {
-
             return Source.GW_HTTPBASIC;
         }
 
