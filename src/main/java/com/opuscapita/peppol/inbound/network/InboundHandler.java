@@ -101,6 +101,8 @@ logger.info("TODO: 40" );
         md.setProfileTypeIdentifier(  "cust:opuscapita:unidentified-process" );
 
         md.setMessageId( wrapper.getHeader("transactionId") );
+        md.setTransmissionId( wrapper.getHeader("transactionId") );
+
         md.setDocumentTypeIdentifier(     "0000:000000000" );
         md.setProfileTypeIdentifier(     "0000:000000000" );
 
