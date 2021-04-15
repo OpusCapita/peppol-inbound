@@ -100,21 +100,21 @@ logger.info("TODO: 40" );
         md.setDocumentTypeIdentifier( "cust:opuscapita:unidentified-document" );
         md.setProfileTypeIdentifier(  "cust:opuscapita:unidentified-process" );
 
-        md.setMessageId( wrapper.getHeader("transactionId") );
+        md.setMessageId( wrapper.getHeader("transactionid") );
         md.setTransmissionId( wrapper.getHeader("transactionId") );
 
         md.setDocumentTypeIdentifier(     "0000:000000000" );
         md.setProfileTypeIdentifier(     "0000:000000000" );
 
         md.setProtocol( wrapper.getHeader("protocol") );
-        md.setUserAgent( wrapper.getHeader("userAgent") );
-        md.setUserAgentVersion( wrapper.getHeader("userAgentVersion") );
+        md.setUserAgent( wrapper.getHeader("useragent") );
+        md.setUserAgentVersion( wrapper.getHeader("useragentversion") );
 
-        md.setSendingAccessPoint( "GW:" + wrapper.getHeader("gwAlias") + ":" + wrapper.getHeader("gwAccount") );
+        md.setSendingAccessPoint( "GW:" + wrapper.getHeader("gwalias") + ":" + wrapper.getHeader("gwaccount") );
 
         try {
           md.setTimestamp(
-            new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss").parse( wrapper.getHeader("gwReceiveTimestamp") )
+            new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss").parse( wrapper.getHeader("gwreceivetimestamp") )
             );
           }
         catch(Exception e) {
