@@ -60,8 +60,8 @@ public class MessageHandler {
             logger.info("TODO: result: " + result);
             return  result;
         } catch (Exception e) {
-            logger.error("Failed to store message " + filename);
-            logger.error( e );
+            logger.error("Failed to store message " + filename );
+            logger.error("Failed to store message " + filename, e);
 
             fail("Failed to store message " + filename, filename, e);
             throw new IOException("Failed to store message " + filename + ", reason: " + e.getMessage(), e);
