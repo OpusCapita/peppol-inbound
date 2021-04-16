@@ -67,12 +67,12 @@ public class MessageHandler {
             InputStream targetStream = new ByteArrayInputStream(theString.getBytes());
 
             String result = storage.put(inputStream, path, filename);
-            logger.info("TODO: result: " + result); 
+            logger.info("TODO: result: " + result);
 
             return  result;
         } catch (Exception e) {
             logger.error("Failed to store message " + filename);
-            logger.error( e );
+            //logger.error( e );
 
             fail("Failed to store message " + filename, filename, e);
             throw new IOException("Failed to store message " + filename + ", reason: " + e.getMessage(), e);
