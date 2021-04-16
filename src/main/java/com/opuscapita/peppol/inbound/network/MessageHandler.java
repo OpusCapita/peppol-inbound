@@ -9,6 +9,8 @@ import com.opuscapita.peppol.commons.eventing.TicketReporter;
 import com.opuscapita.peppol.commons.storage.Storage;
 import com.opuscapita.peppol.commons.storage.StorageUtils;
 import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
+import java.io.ByteArrayOutputStream;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,8 +58,15 @@ public class MessageHandler {
             String path = hotFolder + StorageUtils.FILE_SEPARATOR + source.name().toLowerCase();
             path = StorageUtils.createDailyPath(path, "");
             logger.info("TODO: MesssageHandler.store invoked for path: " + path);
+
+            String theString = convertInputStreamToString(inputStream);
+            logger.info("TODO: body: " + theString);
+
+            InputStream targetStream = new ByteArrayInputStream(initialString.getBytes());
+
             String result = storage.put(inputStream, path, filename);
             logger.info("TODO: result: " + result);
+
             return  result;
         } catch (Exception e) {
             logger.error("Failed to store message " + filename);
@@ -66,6 +75,24 @@ public class MessageHandler {
             fail("Failed to store message " + filename, filename, e);
             throw new IOException("Failed to store message " + filename + ", reason: " + e.getMessage(), e);
         }
+    }
+
+    // Plain Java
+    private String convertInputStreamToString(InputStream is) throws IOException {
+
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+        int length;
+        while ((length = is.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
+        }
+
+        // Java 1.1
+        return result.toString(StandardCharsets.UTF_8.name());
+
+        // Java 10
+        // return result.toString(StandardCharsets.UTF_8);
+
     }
 
     ContainerMessageMetadata extractMetadata(ServletRequestWrapper wrapper) throws IOException {

@@ -32,10 +32,8 @@ public class BusinessInboundHandler {
             String key = headerNames.nextElement();
             String value = request.getHeader(key);
 
-            logger.info("TODO: hdr: " + key + " -> ''" + value + "'");
-
+            logger.debug("HTTP HEADER: " + key + " -> ''" + value + "'");
         }
-
 
         Source source = getSource(request);
         String filename = request.getParameter("filename");
