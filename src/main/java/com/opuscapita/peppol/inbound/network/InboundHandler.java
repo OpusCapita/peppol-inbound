@@ -79,7 +79,7 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
           logger.info("TODO: source == Source.GW - after" );
         }
         filename = StringUtils.isBlank(filename) ? metadata.getMessageId() + ".xml" : filename;
-logger.info("TODO: 30" );
+logger.info("TODO: 30:" + filename );
         logger.info("Received a message from " + source.name() + ", storing content as: " + filename);
         String dataFile = messageHandler.store(filename, source, wrapper.getInputStream());
 logger.info("TODO: 40" );
@@ -101,10 +101,7 @@ logger.info("TODO: 40" );
         md.setProfileTypeIdentifier(  "cust:opuscapita:unidentified-process" );
 
         md.setMessageId( wrapper.getHeader("transactionid") );
-        md.setTransmissionId( wrapper.getHeader("transactionId") );
-
-        md.setDocumentTypeIdentifier(     "0000:000000000" );
-        md.setProfileTypeIdentifier(     "0000:000000000" );
+        md.setTransmissionId( wrapper.getHeader("transactionid") );
 
         md.setProtocol( wrapper.getHeader("protocol") );
         md.setUserAgent( wrapper.getHeader("useragent") );
