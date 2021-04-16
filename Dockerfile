@@ -37,7 +37,7 @@ ENV OXALIS_HOME=$APP_HOME/oxalis
 COPY --from=TEMP_BUILD_IMAGE $APP_HOME/build/libs/peppol-inbound.jar .
 
 HEALTHCHECK --interval=15s --timeout=30s --start-period=40s --retries=15 \
-  CMD wget --quiet --tries=1 --spider http://localhost:3037/api/health/check || exit 1
+  CMD curl --silent --fail http://localhost:3037/api/health/check || exit 1
 
 EXPOSE 3037
 EXPOSE 3062
