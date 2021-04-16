@@ -10,6 +10,8 @@ import com.opuscapita.peppol.commons.storage.Storage;
 import com.opuscapita.peppol.commons.storage.StorageUtils;
 import com.opuscapita.peppol.inbound.rest.ServletRequestWrapper;
 import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -62,15 +64,15 @@ public class MessageHandler {
             String theString = convertInputStreamToString(inputStream);
             logger.info("TODO: body: " + theString);
 
-            InputStream targetStream = new ByteArrayInputStream(initialString.getBytes());
+            InputStream targetStream = new ByteArrayInputStream(theString.getBytes());
 
             String result = storage.put(inputStream, path, filename);
             logger.info("TODO: result: " + result);
 
             return  result;
         } catch (Exception e) {
-            logger.error("Failed to store message " + filename );
-            logger.error("Failed to store message " + filename, e);
+            logger.error("Failed to store message " + filename);
+            //logger.error( e );
 
             fail("Failed to store message " + filename, filename, e);
             throw new IOException("Failed to store message " + filename + ", reason: " + e.getMessage(), e);
@@ -81,7 +83,7 @@ public class MessageHandler {
     private String convertInputStreamToString(InputStream is) throws IOException {
 
         ByteArrayOutputStream result = new ByteArrayOutputStream();
-        byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+        byte[] buffer = new byte[4096];
         int length;
         while ((length = is.read(buffer)) != -1) {
             result.write(buffer, 0, length);
