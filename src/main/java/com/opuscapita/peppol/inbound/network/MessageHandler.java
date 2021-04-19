@@ -61,12 +61,12 @@ public class MessageHandler {
             path = StorageUtils.createDailyPath(path, "");
             logger.info("TODO: MesssageHandler.store invoked for path: " + path);
 
-            String theString = convertInputStreamToString(inputStream);
-            logger.info("TODO: body: " + theString);
+            //String theString = convertInputStreamToString(inputStream);
+            //logger.info("TODO: body: " + theString);
 
-            InputStream targetStream = new ByteArrayInputStream(theString.getBytes());
+            //InputStream targetStream = new ByteArrayInputStream(theString.getBytes());
 
-            String result = storage.put(targetStream, path, filename);
+            String result = storage.put(inputStream, path, filename);
             logger.info("TODO: result: " + result);
 
             return  result;
