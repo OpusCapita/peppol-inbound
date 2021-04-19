@@ -66,7 +66,7 @@ public class MessageHandler {
 
             InputStream targetStream = new ByteArrayInputStream(theString.getBytes());
 
-            String result = storage.put(inputStream, path, filename);
+            String result = storage.put(targetStream, path, filename);
             logger.info("TODO: result: " + result);
 
             return  result;
