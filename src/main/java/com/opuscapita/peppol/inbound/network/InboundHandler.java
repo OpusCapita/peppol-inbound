@@ -121,6 +121,7 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
                 ", documentType=" + metadata.getDocumentTypeIdentifier() +
                 ", messageId=" + metadata.getMessageId() +
                 ", transmissionId=" + metadata.getTransmissionId() +
+                ", sendingAccessPoint=" + metadata.getSendingAccessPoint() +
                 ", instanceType=" + metadata.getInstanceType() +
                 ", timestamp=" + metadata.getTimestamp() +
                 "}");
