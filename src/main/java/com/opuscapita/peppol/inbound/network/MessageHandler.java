@@ -56,45 +56,18 @@ public class MessageHandler {
     // this is the only method that allowed to throw an exception which will be propagated to the sending party
     String store(String filename, Source source, InputStream inputStream) throws IOException {
         try {
-            logger.info("TODO: MesssageHandler.store invoked for filename: " + filename); //should be debug
             String path = hotFolder + StorageUtils.FILE_SEPARATOR + source.name().toLowerCase();
             path = StorageUtils.createDailyPath(path, "");
-            logger.info("TODO: MesssageHandler.store invoked for path: " + path);
-
-            String theString = convertInputStreamToString(inputStream);
-            logger.info("TODO: body: " + theString);
-
-            InputStream targetStream = new ByteArrayInputStream(theString.getBytes());
 
             String result = storage.put(inputStream, path, filename);
-            logger.info("TODO: result: " + result);
 
             return  result;
         } catch (Exception e) {
-            logger.error("Failed to store message " + filename);
-            //logger.error( e );
+            logger.error("Failed to store message to blob " + filename);
 
             fail("Failed to store message " + filename, filename, e);
             throw new IOException("Failed to store message " + filename + ", reason: " + e.getMessage(), e);
         }
-    }
-
-    // Plain Java
-    private String convertInputStreamToString(InputStream is) throws IOException {
-
-        ByteArrayOutputStream result = new ByteArrayOutputStream();
-        byte[] buffer = new byte[4096];
-        int length;
-        while ((length = is.read(buffer)) != -1) {
-            result.write(buffer, 0, length);
-        }
-
-        // Java 1.1
-        return result.toString(StandardCharsets.UTF_8.name());
-
-        // Java 10
-        // return result.toString(StandardCharsets.UTF_8);
-
     }
 
     ContainerMessageMetadata extractMetadata(ServletRequestWrapper wrapper) throws IOException {

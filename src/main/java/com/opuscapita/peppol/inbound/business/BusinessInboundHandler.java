@@ -25,27 +25,27 @@ public class BusinessInboundHandler {
         ServletRequestWrapper wrapper = new ServletRequestWrapper(request);
 
 
-        logger.info("TODO: BussinessInboundHandler.receive entered");
+        logger.debug("BussinessInboundHandler.receive entered");
 
+        /* OUTCOMMENT FOR EXTRA DEBUG
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames != null && headerNames.hasMoreElements()) {
             String key = headerNames.nextElement();
             String value = request.getHeader(key);
 
-            logger.debug("HTTP HEADER: " + key + " -> ''" + value + "'");
-        }
+            //logger.debug("HTTP HEADER: " + key + " -> ''" + value + "'"); super debug
+        }*/
 
         Source source = getSource(request);
         String filename = request.getParameter("filename");
 
-        logger.info("TODO filename = " + filename +" source=" + source );
+        logger.info("Received Filename = " + filename +" source=" + source );
 
         persisterHandler.persist(filename, source, wrapper);
     }
 
     private Source getSource(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        logger.info("TODO uri = " + uri  );
 
         if (uri.contains("reprocess")) {
             return Source.valueOf(request.getHeader("Peppol-Source"));

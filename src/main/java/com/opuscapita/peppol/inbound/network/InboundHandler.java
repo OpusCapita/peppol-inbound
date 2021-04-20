@@ -67,32 +67,23 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
     public void persist(String filename, Source source, ServletRequestWrapper wrapper) throws IOException {
         ContainerMessageMetadata metadata;
 
-        logger.info("TODO entering persist = " + filename +" source=" + source, " wrapper=" + wrapper );
-
         if( source != Source.GW ) {
-          logger.info("TODO: source != Source.GW" );
           metadata = messageHandler.extractMetadata(wrapper);
         }
         else {
-          logger.info("TODO: source == Source.GW" );
           metadata = this.extractGWMetadataFromHeaderParams(wrapper);
-          logger.info("TODO: source == Source.GW - after" );
         }
         filename = StringUtils.isBlank(filename) ? metadata.getMessageId() + ".xml" : filename;
-logger.info("TODO: 30:" + filename );
+
         logger.info("Received a message from " + source.name() + ", storing content as: " + filename);
         String dataFile = messageHandler.store(filename, source, wrapper.getInputStream());
-logger.info("TODO: 40" );
+
         logReceipt(metadata, source, dataFile);
-
-        logger.info("TODO: 50" );
         messageHandler.process(metadata, source, dataFile);
-
-        logger.info("TODO: 60" );
     }
 
 
-    ContainerMessageMetadata extractGWMetadataFromHeaderParams( ServletRequestWrapper wrapper ) { //TODO move to common??
+    ContainerMessageMetadata extractGWMetadataFromHeaderParams( ServletRequestWrapper wrapper ) {
         ContainerMessageMetadata md = new ContainerMessageMetadata();
 
         md.setRecipientId(  "0000:000000000" );
