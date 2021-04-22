@@ -48,6 +48,6 @@
   },
   "prod": {
     "replicas": 1,
-    "limit-memory": "14000M"
+    "limit-memory": "6144M"
   }
 }
