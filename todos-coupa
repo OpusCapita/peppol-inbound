@@ -1,0 +1,54 @@
+    @Since(1.0) private String messageId;
+
+   /**
+    * Created during AS2 transmission
+    * For BP endpoints, we create it using randomUUID
+    * Must be unique for every process
+    */
+   @Since(1.0) private String transmissionId;       <--- transactionid
+
+   @Since(1.0) private String senderId;             <--- 0000:0000000000
+   @Since(1.0) private String recipientId;          <--- 0000:0000000000
+
+   @Since(1.0) private String sendingAccessPoint;      <--- NA
+   @Since(1.0) private String receivingAccessPoint;    <--- NA
+
+   Examples
+   documentId: "urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:fdc:peppol.eu:poacc:trns:order:3::2.1"
+   processId: "urn:fdc:peppol.eu:poacc:bis:order_only:3"
+
+{
+   documentTypeIdentifier: "urn:opuscapita:un-identified-document"
+   profileTypeIdentifier:  "urn:opuscapita:un-identified-process"
+
+   @Since(1.0) private String documentTypeIdentifier;  <--- "unknown"
+   @Since(1.0) private String profileTypeIdentifier;
+}
+
+
+   @Since(1.0) private String instanceType;
+   @Since(1.0) private String instanceTypeVersion;
+   @Since(1.0) private String instanceTypeStandard;
+
+   @Since(1.0) private Date timestamp; <--- WHICH Format???   2021-01-14T15:28:56.000+0000
+
+   @Since(1.0) private String protocol;                  <- Client param, just pass through
+   @Since(1.0) private String userAgent;                 <- Client user agent
+   @Since(1.0) private String userAgentVersion;          <- ""
+
+   @Since(1.0) private ContainerValidationRule validationRule;
+   @Since(1.1) private ContainerBusinessMetadata businessMetadata;
+
+
+   @Since(1.0) private String gwaccount;      <--- Must add to the record ?? (maybe virtual)
+
+
+
+
+
+   @Since(1.0) private String protocol;                  <- Client param, just pass through
+   @Since(1.0) private String userAgent;                 <- Client user agent
+   @Since(1.0) private String userAgentVersion;          <- ""
+   @Since(1.0) private String gwAlias;      <--- "PUBLIC_HTTP_BASIC"
+   @Since(1.0) private String gwAccount;      <--- Must add to the record ?? (maybe virtual)
+   @Since(1.0) private Date   gwReceiveTimestamp; <--- WHICH Format???   2021-01-14T15:28:56.000+0000

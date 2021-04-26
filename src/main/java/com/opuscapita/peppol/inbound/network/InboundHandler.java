@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * Receives message from Oxalis and gives it to us.
@@ -63,7 +65,14 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
     // file coming from business platform: source, both payload and receipt persistence
     @Override
     public void persist(String filename, Source source, ServletRequestWrapper wrapper) throws IOException {
-        ContainerMessageMetadata metadata = messageHandler.extractMetadata(wrapper);
+        ContainerMessageMetadata metadata;
+
+        if( source != Source.GW ) {
+          metadata = messageHandler.extractMetadata(wrapper);
+        }
+        else {
+          metadata = this.extractGWMetadataFromHeaderParams(wrapper);
+        }
         filename = StringUtils.isBlank(filename) ? metadata.getMessageId() + ".xml" : filename;
 
         logger.info("Received a message from " + source.name() + ", storing content as: " + filename);
@@ -71,6 +80,36 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
 
         logReceipt(metadata, source, dataFile);
         messageHandler.process(metadata, source, dataFile);
+    }
+
+
+    ContainerMessageMetadata extractGWMetadataFromHeaderParams( ServletRequestWrapper wrapper ) {
+        ContainerMessageMetadata md = new ContainerMessageMetadata();
+
+        md.setRecipientId(  "0000:000000000" );
+        md.setSenderId(     "0000:000000000" );
+        md.setDocumentTypeIdentifier( "cust:opuscapita:unidentified-document" );
+        md.setProfileTypeIdentifier(  "cust:opuscapita:unidentified-process" );
+
+        md.setMessageId( wrapper.getHeader("transactionid") );
+        md.setTransmissionId( wrapper.getHeader("transactionid") );
+
+        md.setProtocol( wrapper.getHeader("protocol") );
+        md.setUserAgent( wrapper.getHeader("useragent") );
+        md.setUserAgentVersion( wrapper.getHeader("useragentversion") );
+
+        md.setSendingAccessPoint( "GW:" + wrapper.getHeader("gwalias") + ":" + wrapper.getHeader("gwaccount") );
+
+        try {
+          md.setTimestamp(
+            new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss").parse( wrapper.getHeader("gwreceivetimestamp") )
+            );
+          }
+        catch(Exception e) {
+          md.setTimestamp( new Date() );
+        }
+
+       return md;
     }
 
     private void logReceipt(ContainerMessageMetadata metadata, Source source, String filename) {
@@ -82,6 +121,7 @@ public class InboundHandler implements PersisterHandler, BusinessInboundPersiste
                 ", documentType=" + metadata.getDocumentTypeIdentifier() +
                 ", messageId=" + metadata.getMessageId() +
                 ", transmissionId=" + metadata.getTransmissionId() +
+                ", sendingAccessPoint=" + metadata.getSendingAccessPoint() +
                 ", instanceType=" + metadata.getInstanceType() +
                 ", timestamp=" + metadata.getTimestamp() +
                 "}");
