@@ -59,7 +59,13 @@ public class MessageHandler {
             String path = hotFolder + StorageUtils.FILE_SEPARATOR + source.name().toLowerCase();
             path = StorageUtils.createDailyPath(path, "");
 
-            logger.warn("Number of bytes on stream " + inputStream.available());
+            if( inputStream.available() == 0 ) {
+                logger.warn("Number of bytes on stream is zero");
+
+                throw new Exception( "Number of bytes on stream is zero" );
+            }
+
+            logger.info("Number of bytes on stream " + inputStream.available());
             String result = storage.put(inputStream, path, filename);
 
             return  result;
