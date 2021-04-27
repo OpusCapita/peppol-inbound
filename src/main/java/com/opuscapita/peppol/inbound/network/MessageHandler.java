@@ -60,11 +60,11 @@ public class MessageHandler {
             path = StorageUtils.createDailyPath(path, "");
 
             if( inputStream.available() == 0 ) {
-                logger.warn("Number of bytes on stream is zero");
+                logger.warn("Number of bytes on stream is zero for " + filename);
 
                 throw new Exception( "Number of bytes on stream is zero" );
             }
-            
+
             String result = storage.put(inputStream, path, filename);
 
             return  result;
