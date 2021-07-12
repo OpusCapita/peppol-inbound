@@ -43,11 +43,10 @@
       "oxalis-keystore-07082020.jks": {"type": "binary", "encoding": "base64", "value": "${PEPPOL_:env_KEYSTORE}"}
     },
     "limit-memory": "900M",
-    "reserve-memory": "900M",
     "oc-service-user-create-override": "true"
   },
   "prod": {
-    "replicas": 1,
+    "replicas": 2,
     "limit-memory": "6144M"
   }
 }
